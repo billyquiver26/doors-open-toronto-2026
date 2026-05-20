@@ -419,7 +419,6 @@ body { padding-top: 46px; scroll-padding-top: 60px; }
 
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 </head>
 <body>
 <a id="top"></a>
@@ -2041,6 +2040,7 @@ body { padding-top: 46px; scroll-padding-top: 60px; }
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {
   var SB_URL = 'https://kvlgafyvfcdcxyqvfwpq.supabase.co';
@@ -2261,11 +2261,7 @@ body { padding-top: 46px; scroll-padding-top: 60px; }
   var MAPS_INITIALIZED = {};
   function initMap(mapId) {
     if (MAPS_INITIALIZED[mapId]) return;
-    if (typeof L === 'undefined') {
-      // Leaflet not loaded yet — retry shortly
-      setTimeout(function() { initMap(mapId); }, 150);
-      return;
-    }
+    if (typeof L === 'undefined') return;
     var cfg = MAPS_DATA[mapId];
     var el = document.getElementById(mapId);
     if (!cfg || !el) return;
@@ -2302,22 +2298,15 @@ body { padding-top: 46px; scroll-padding-top: 60px; }
     MAPS_INITIALIZED[mapId] = true;
   }
   function setupMapObserver() {
-    if (typeof IntersectionObserver === 'undefined') {
-      // Fallback: init all immediately
-      Object.keys(MAPS_DATA).forEach(initMap);
+    // Init all maps now. Leaflet is loaded synchronously above this script.
+    if (typeof L === 'undefined') {
+      console.warn('Leaflet not loaded — maps disabled');
       return;
     }
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          initMap(entry.target.id);
-          obs.unobserve(entry.target);
-        }
-      });
-    }, {rootMargin: '300px'});
-    document.querySelectorAll('.section-map').forEach(function(el) {
-      obs.observe(el);
+    Object.keys(MAPS_DATA).forEach(function(mapId) {
+      try { initMap(mapId); } catch(e) { console.error('Map init failed:', mapId, e); }
     });
+    console.log('Maps initialized:', Object.keys(MAPS_INITIALIZED).length);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
