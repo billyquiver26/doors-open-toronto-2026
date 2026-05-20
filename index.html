@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doors Open Toronto + Obsession — May 23, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1614;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --red: #c0392b;
+    --gold: #b8860b;
+    --muted: #7a7062;
+    --border: #d4c9b0;
+    --film: #6a1b9a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; }
+
+  .header { background: var(--ink); color: var(--paper); padding: 60px 40px 50px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px); }
+  .header-inner { max-width: 900px; margin: 0 auto; position: relative; }
+  .header-tag { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 7vw, 80px); font-weight: 900; line-height: 0.95; letter-spacing: -2px; margin-bottom: 20px; }
+  .header h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .header-sub { font-size: 14px; color: rgba(245,240,232,0.6); font-weight: 300; letter-spacing: 0.05em; }
+  .header-meta { display: flex; gap: 32px; margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
+  .meta-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--paper); }
+
+  .criteria-bar { background: var(--red); padding: 14px 40px; }
+  .criteria-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .crit { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.95); letter-spacing: 0.04em; }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+
+  .section { margin-top: 60px; }
+  .section.film .section-header { border-bottom-color: var(--film); }
+  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
+  .section-day { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); white-space: nowrap; }
+  .section.film .section-day { color: var(--film); }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .section-note { font-size: 12px; color: var(--muted); font-style: italic; margin-left: auto; white-space: nowrap; }
+
+  .sub-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin: 20px 0 6px; font-weight: 500; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 1px; }
+  .grid-cinemas { grid-template-columns: 1fr; }
+
+  a.card { background: var(--paper); padding: 18px 20px; position: relative; transition: background 0.15s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
+  a.card:hover { background: var(--cream); }
+  a.card::after { content: '↗'; position: absolute; top: 14px; right: 14px; font-size: 11px; color: var(--muted); opacity: 0; transition: opacity 0.15s; font-weight: 500; }
+  a.card:hover::after { opacity: 1; }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; padding-right: 16px; }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; line-height: 1.25; letter-spacing: -0.2px; }
+  .card-badges { display: flex; gap: 4px; flex-shrink: 0; align-items: flex-start; flex-wrap: wrap; justify-content: flex-end; }
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; }
+  .badge-rarity-red    { background: rgba(192,57,43,0.16); color: #a93226; }
+  .badge-rarity-orange { background: rgba(230,126,34,0.18); color: #b9651d; }
+  .badge-rarity-yellow { background: rgba(184,134,11,0.18); color: #8e6708; }
+  .badge-rarity-green  { background: rgba(39,124,77,0.16); color: #1e6e44; }
+  .badge-new { background: rgba(184,134,11,0.22); color: #8e6708; font-weight: 700; }
+  .badge-sun { background: rgba(0,0,0,0.06); color: var(--muted); font-weight: 500; }
+
+  .card-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+  .card-addr { font-size: 11px; color: var(--muted); letter-spacing: 0.01em; }
+  .card-note { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 9px; margin-top: 2px; }
+
+  /* Standout (🔴 sites that are never normally open — featured) */
+  a.card.standout { background: var(--ink); color: var(--paper); }
+  a.card.standout .card-name { color: var(--paper); }
+  a.card.standout .card-addr { color: rgba(245,240,232,0.5); }
+  a.card.standout .card-note { color: rgba(245,240,232,0.65); border-color: rgba(255,255,255,0.12); }
+  a.card.standout:hover { background: #2a2420; }
+  a.card.standout .badge-rarity-red    { background: rgba(192,57,43,0.30); color: #f0a89c; }
+  a.card.standout .badge-rarity-orange { background: rgba(230,126,34,0.25); color: #ffcc80; }
+  a.card.standout .badge-rarity-yellow { background: rgba(184,134,11,0.30); color: #ffd970; }
+  a.card.standout .badge-rarity-green  { background: rgba(39,124,77,0.30); color: #8fd9a7; }
+  a.card.standout .badge-new           { background: rgba(184,134,11,0.40); color: #ffd970; }
+  a.card.standout .badge-sun           { background: rgba(255,255,255,0.12); color: rgba(245,240,232,0.7); }
+  a.card.standout::after { color: rgba(245,240,232,0.5); }
+
+  /* Cinema cards — distinct treatment, full-width */
+  a.card.cinema { background: var(--ink); color: var(--paper); padding: 22px 24px; }
+  a.card.cinema:hover { background: #2a2420; }
+  a.card.cinema .card-name { color: var(--paper); font-size: 19px; }
+  a.card.cinema .card-addr { color: rgba(245,240,232,0.55); font-size: 12px; }
+  a.card.cinema .card-note { color: rgba(245,240,232,0.7); border-color: rgba(255,255,255,0.14); }
+  a.card.cinema::after { color: rgba(245,240,232,0.5); }
+  .showtimes { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .showtime { display: inline-block; padding: 5px 9px; border-radius: 4px; font-size: 12px; font-weight: 500; background: rgba(255,255,255,0.10); color: var(--paper); letter-spacing: 0.02em; }
+  .showtime.ultra { background: rgba(184,134,11,0.28); color: #ffd970; }
+  .showtime.vip { background: rgba(106,27,154,0.32); color: #d9b3ff; }
+  .showtime-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin: 10px 0 4px; font-weight: 500; }
+  .recommend { display: inline-block; margin-top: 12px; padding: 6px 10px; background: rgba(192,57,43,0.22); color: #f5beb5; border-radius: 4px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
+
+  .cinema-far { padding: 14px 18px; }
+  .cinema-far .card-name { font-size: 14px; }
+
+  .footer { background: var(--ink); color: var(--paper); padding: 40px; margin-top: 80px; }
+  .footer-inner { max-width: 900px; margin: 0 auto; }
+  .footer-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--gold); }
+  .legend { display: flex; gap: 24px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(245,240,232,0.7); }
+  .footer-note { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(245,240,232,0.45); line-height: 1.7; }
+  .footer-flag { background: rgba(192,57,43,0.22); padding: 10px 14px; border-radius: 4px; margin-top: 14px; font-size: 12px; color: #f5beb5; }
+
+  @media (max-width: 600px) {
+    .header, .criteria-bar, .main, .footer { padding-left: 22px; padding-right: 22px; }
+    .header-meta { gap: 20px; }
+    .grid { grid-template-columns: 1fr; }
+    .section-note { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-tag">Saturday May 23, 2026 · 10am – 5pm</div>
+    <h1>Doors Open<br><em>&amp; Obsession</em></h1>
+    <div class="header-sub">168 Doors Open sites across Toronto, paired with confirmed cinemas screening Obsession (2026). Click any card to open in Google Maps.</div>
+    <div class="header-meta">
+      <div class="meta-item"><span class="meta-label">DO Sites</span><span class="meta-val">168</span></div>
+      <div class="meta-item"><span class="meta-label">Cinemas (in range)</span><span class="meta-val">6</span></div>
+      <div class="meta-item"><span class="meta-label">Film runtime</span><span class="meta-val">1h 48m</span></div>
+      <div class="meta-item"><span class="meta-label">RT score</span><span class="meta-val">95%</span></div>
+      <div class="meta-item"><span class="meta-label">Rating</span><span class="meta-val">14A</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="criteria-bar">
+  <div class="criteria-inner">
+    <div class="crit">🔴 Never / almost never open</div>
+    <div class="crit">🟠 Rare (private / special only)</div>
+    <div class="crit">🟡 Fee / appointment normally</div>
+    <div class="crit">🟢 Open regularly, special programming</div>
+    <div class="crit">★ New 2026</div>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ════════════════ CINEMAS — OBSESSION MAY 23 ════════════════ -->
+<section class="section film">
+  <div class="section-header">
+    <span class="section-day">FILM · MAY 23</span>
+    <h2 class="section-title">Obsession — Confirmed Showtimes</h2>
+    <span class="section-note">6 cinemas within 10 km of Bloor &amp; Ossington</span>
+  </div>
+  <div class="sub-label">Showtimes confirmed via Cineplex app · Doors Open closes 5pm — plan accordingly</div>
+
+  <div class="grid grid-cinemas">
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Scotiabank+Theatre+Toronto+259+Richmond+Street+West" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Scotiabank Theatre Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">Densest DO walk</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">259 Richmond St W · Entertainment District</span></div>
+      <div class="showtime-label">UltraAVX Laser</div>
+      <div class="showtimes">
+        <span class="showtime ultra">1:10 PM</span>
+        <span class="showtime ultra">4:00 PM</span>
+        <span class="showtime ultra">6:50 PM</span>
+        <span class="showtime ultra">9:40 PM</span>
+      </div>
+      <div class="showtime-label">Regular</div>
+      <div class="showtimes">
+        <span class="showtime">11:40 AM</span>
+        <span class="showtime">12:40 PM</span>
+        <span class="showtime">3:30 PM</span>
+        <span class="showtime">6:15 PM</span>
+        <span class="showtime">9:00 PM</span>
+      </div>
+      <div class="card-note">Pairs with the city's densest Doors Open cluster: Old City Hall 🔴, Osgoode Hall 🟠, City Hall 🟡, TIFF Lightbox 🟡, Steam Whistle 🟡, St. James, St. Lawrence Hall, Holy Trinity, Campbell House, Second City, TD Centre — 15+ sites within a 25-min walk.</div>
+      <div class="recommend">→ Strong pick: 6:50 PM UltraAVX after a full Doors Open day</div>
+    </a>
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Dundas+VIP+10+Dundas+East+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cineplex Yonge-Dundas &amp; VIP</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">Downtown anchor</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">10 Dundas St E · Downtown</span></div>
+      <div class="showtime-label">VIP (19+)</div>
+      <div class="showtimes">
+        <span class="showtime vip">12:30 PM</span>
+        <span class="showtime vip">4:00 PM</span>
+        <span class="showtime vip">7:15 PM</span>
+        <span class="showtime vip">10:00 PM</span>
+      </div>
+      <div class="showtime-label">Regular</div>
+      <div class="showtimes">
+        <span class="showtime">1:20 PM</span>
+        <span class="showtime">4:20 PM</span>
+        <span class="showtime">7:20 PM</span>
+        <span class="showtime">10:15 PM</span>
+      </div>
+      <div class="card-note">Same Downtown Core cluster as Scotiabank. Also close: TMU Architectural Science 🟡, Toronto Humane Society 🟡. The 4:20 PM Regular leaves the full Doors Open day intact.</div>
+    </a>
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Varsity+VIP+55+Bloor+West+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cineplex Varsity &amp; VIP</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">Best timing</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">55 Bloor St W · Yorkville / Annex</span></div>
+      <div class="showtime-label">Regular</div>
+      <div class="showtimes">
+        <span class="showtime">11:30 AM</span>
+        <span class="showtime">5:10 PM</span>
+        <span class="showtime">7:45 PM</span>
+        <span class="showtime">10:20 PM</span>
+      </div>
+      <div class="card-note">Yorkville/Annex cluster: Heliconian Hall 🔴, Women's Art Association 🔴, Bata 🟡, KPMB 🟠, Goethe / Alliance 🟠, U of T Physics deck 🟡, Hot Docs 🟡. Note the gap: no afternoon showings 11:30 AM → 5:10 PM.</div>
+      <div class="recommend">→ Top pick overall: 5:10 PM covers all of Doors Open (closes 5pm) with zero compromise</div>
+    </a>
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Eglinton+VIP+2300+Yonge+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cineplex Yonge-Eglinton &amp; VIP</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">Sringeri temple 2 blocks</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2300 Yonge St · Midtown</span></div>
+      <div class="showtime-label">Regular</div>
+      <div class="showtimes">
+        <span class="showtime">1:00 PM</span>
+        <span class="showtime">3:40 PM</span>
+        <span class="showtime">6:30 PM</span>
+        <span class="showtime">9:40 PM</span>
+      </div>
+      <div class="card-note">Sringeri Vidya Bharati Foundation ★🔴 is literally 2 blocks south (2180 Yonge) — 9th-century Chola-style Hindu temple, normally inaccessible. Also Akin Davisville 🟡, Blessed Sacrament ★🟢, Manor Road United 🟠.</div>
+      <div class="recommend">→ Strong pick: 1:00 PM — hit Sringeri at 10am, film at 1pm, then Akin / Blessed Sacrament after</div>
+    </a>
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yorkdale+3401+Dufferin+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cineplex Yorkdale</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">Sparse cluster</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Yorkdale Shopping Centre, Lawrence Ave W · North York</span></div>
+      <div class="showtime-label">UltraAVX</div>
+      <div class="showtimes">
+        <span class="showtime ultra">1:40 PM</span>
+        <span class="showtime ultra">4:30 PM</span>
+        <span class="showtime ultra">7:20 PM</span>
+        <span class="showtime ultra">10:15 PM</span>
+      </div>
+      <div class="card-note">No Regular showings. Least strategic for Doors Open pairing — Archives of Ontario at York campus ★🔴, Kadampa Buddhist Temple 🔴, Village at Black Creek 🟡, Historic Zion Schoolhouse 🟠 require driving/transit.</div>
+    </a>
+
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+VIP+Don+Mills+12+Marie+Labatte+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cineplex VIP Don Mills</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">Aga Khan / Ismaili / JCCC</span><span class="badge badge-sun">19+</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">12 Marie Labatte Rd · Shops at Don Mills</span></div>
+      <div class="showtime-label">VIP Laser (19+ only)</div>
+      <div class="showtimes">
+        <span class="showtime vip">11:45 AM</span>
+        <span class="showtime vip">3:00 PM</span>
+        <span class="showtime vip">6:30 PM</span>
+        <span class="showtime vip">10:00 PM</span>
+      </div>
+      <div class="card-note">Pairs with the most architecturally singular cluster in Toronto: Aga Khan Museum 🟡 + Ismaili Centre ★🔴 (Fumihiko Maki prayer hall) + Japanese Canadian Cultural Centre 🟠 — all within 1 km of each other and the cinema.</div>
+      <div class="recommend">→ Strong pick: 3:00 PM — Wynford Drive cluster done by 1pm, film at 3pm</div>
+    </a>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">DOWNTOWN</span>
+    <h2 class="section-title">Downtown Core</h2>
+    <span class="section-note">Financial / Entertainment District · Densest Doors Open walk in the city</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+City+Hall+60+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Old City Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">60 Queen St W, Toronto</span></div>
+      <div class="card-note">Vacant since 2025 court relocation; ornate interiors + secret courtyard, normally completely inaccessible</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Star+1+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Star</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1 Yonge St, Toronto</span></div>
+      <div class="card-note">Working newsroom, rarely opened to public</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=TVO+Studio+Tour+%26+Experience+2180+Yonge+St+area%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">TVO Studio Tour &amp; Experience</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2180 Yonge St area, Toronto</span></div>
+      <div class="card-note">Newly renovated public broadcaster studio; first time open</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Masjid+Toronto+168+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Masjid Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">168 Dundas St W, Toronto</span></div>
+      <div class="card-note">Behind-the-scenes of active downtown mosque</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=RCLUB+Motoring+Club+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">RCLUB Motoring Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private members club, almost no public profile</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Foy-Smith+House+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Foy-Smith House</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private historic residence</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Osgoode+Hall+130+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Osgoode Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">130 Queen St W, Toronto</span></div>
+      <div class="card-note">Iconic Law Society building; interiors and library rarely open outside formal events</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Hall+%E2%80%94+Arts+%26+Letters+Club+14+Elm+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. George's Hall — Arts &amp; Letters Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">14 Elm St, Toronto</span></div>
+      <div class="card-note">Private arts club founded 1908, limited public access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Regis+College+100+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Regis College</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">100 Wellesley St W, Toronto</span></div>
+      <div class="card-note">Jesuit theological college; campus rarely open</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Thornton-Smith+Building+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Thornton-Smith Building</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Heritage commercial building not regularly public</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Guido+Costantino+Projects+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Guido Costantino Projects</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private art space</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Raw+Signal+Group+Headquarters+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Raw Signal Group Headquarters</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private office</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Giaimo+%2F+DIALOG+%2F+Gow+Hastings+%2F+DTAH+%2F+Q4+%2F+Taylor+Hazell+%2F+Turner+Fleischer+Various+downtown+studios" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Giaimo / DIALOG / Gow Hastings / DTAH / Q4 / Taylor Hazell / Turner Fleischer</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Various downtown studios</span></div>
+      <div class="card-note">Working architecture studios — all private normally</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=El+Mocambo+464+Spadina+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">El Mocambo</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">464 Spadina Ave, Toronto</span></div>
+      <div class="card-note">Legendary music venue; backstage / building areas normally restricted</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Stella%27s+Place+Assessment+and+Treatment+Centre+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Stella's Place Assessment and Treatment Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Mental health facility, not normally toured</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Nursing+Simulation+Centre+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Nursing Simulation Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Medical training facility</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+City+Hall+100+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto City Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">100 Queen St W, Toronto</span></div>
+      <div class="card-note">Council Chamber, Mayor's Office, 27th floor observation deck — restricted floors normally</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Legislative+Assembly+of+Ontario+%28Queen%27s+Park%29+111+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Legislative Assembly of Ontario (Queen's Park)</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">111 Wellesley St W, Toronto</span></div>
+      <div class="card-note">Behind-the-scenes access during Doors Open specifically</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Ontario+Heritage+Centre+10+Adelaide+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Ontario Heritage Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">10 Adelaide St E, Toronto</span></div>
+      <div class="card-note">Government heritage building</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TIFF+Lightbox+350+King+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">TIFF Lightbox</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">350 King St W, Toronto</span></div>
+      <div class="card-note">Free admission (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Second+City+51+Mercer+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Second City</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">51 Mercer St, Toronto</span></div>
+      <div class="card-note">Comedy venue; behind-the-scenes access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+519+519+Church+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The 519</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">519 Church St, Toronto</span></div>
+      <div class="card-note">LGBTQ+ community centre, open but special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TMU+Department+of+Architectural+Science+Toronto+Metropolitan+University" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">TMU Department of Architectural Science</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto Metropolitan University</span></div>
+      <div class="card-note">Special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+School+of+Art+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto School of Art</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">180 Shaw St, Toronto</span></div>
+      <div class="card-note">Studio access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Humane+Society+11+River+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Humane Society</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">11 River St, Toronto</span></div>
+      <div class="card-note">Special tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto-Dominion+Centre+66+Wellington+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto-Dominion Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">66 Wellington St W, Toronto</span></div>
+      <div class="card-note">Mies van der Rohe architecture, behind-scenes banking hall access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Steam+Whistle+Brewing+255+Bremner+Blvd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Steam Whistle Brewing</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">255 Bremner Blvd, Toronto</span></div>
+      <div class="card-note">Normally charges for tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Campbell+House+Museum+160+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Campbell House Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">160 Queen St W, Toronto</span></div>
+      <div class="card-note">Free (normally charges); oldest surviving building from Town of York</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Holy+Trinity+19+Trinity+Square%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Church of the Holy Trinity</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">19 Trinity Square, Toronto</span></div>
+      <div class="card-note">Open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Metropolitan+United+Church+56+Queen+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Metropolitan United Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">56 Queen St E, Toronto</span></div>
+      <div class="card-note">Open, special access to architectural details</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James+Cathedral+65+Church+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. James Cathedral</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">65 Church St, Toronto</span></div>
+      <div class="card-note">Open, guided tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Hall+157+King+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Lawrence Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">157 King St E, Toronto</span></div>
+      <div class="card-note">Open, special guided access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Market+North+Building+92+Front+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Lawrence Market North Building</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">92 Front St E, Toronto</span></div>
+      <div class="card-note">Open, heritage access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Andrew%27s+Presbyterian+Church+73+Simcoe+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Andrew's Presbyterian Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">73 Simcoe St, Toronto</span></div>
+      <div class="card-note">Open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Greek+Orthodox+Church+115+Bond+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. George's Greek Orthodox Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">115 Bond St, Toronto</span></div>
+      <div class="card-note">Open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Jarvis+Street+Baptist+Church+130+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Jarvis Street Baptist Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">130 Gerrard St E, Toronto</span></div>
+      <div class="card-note">Open, tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Camera+Club+587+Mt+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Camera Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">587 Mt Pleasant Rd, Toronto</span></div>
+      <div class="card-note">Open house</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">OLD TOWN</span>
+    <h2 class="section-title">Old Town / Port Lands / East Downtown</h2>
+    <span class="section-note">Heritage industrial + new Indigenous & Port Lands sites</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=25+Ookwemin+Street+281+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">25 Ookwemin Street</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">281 Cherry St, Toronto</span></div>
+      <div class="card-note">Former Toronto Hydro Station; rare behind-scenes of Port Lands transformation, Ontario Heritage Trust protected</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Anishnawbe+Health+Toronto+425+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Anishnawbe Health Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">425 Cherry St, Toronto</span></div>
+      <div class="card-note">New purpose-built Indigenous health facility, not normally toured</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Carpet+Factory+67+Mowat+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Carpet Factory</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">67 Mowat Ave, Toronto</span></div>
+      <div class="card-note">Industrial heritage building not normally open</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=433+Eastern+Yard+433+Eastern+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">433 Eastern Yard</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">433 Eastern Ave, Toronto</span></div>
+      <div class="card-note">Consumers Gas 1912; City Transportation Division yard, rare access to service vehicles + salt storage</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=401+Richmond+Ltd.+401+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">401 Richmond Ltd.</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">401 Richmond St W, Toronto</span></div>
+      <div class="card-note">Arts hub, special access to artists' studios (Sat only)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=City+of+Toronto+Archives+255+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">City of Toronto Archives</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">255 Spadina Rd, Toronto</span></div>
+      <div class="card-note">Free admission (normally charges / appointment)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Mackenzie+House+82+Bond+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Mackenzie House</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">82 Bond St, Toronto</span></div>
+      <div class="card-note">Normally charges; free during Doors Open</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Market+Gallery+95+Front+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Market Gallery</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">95 Front St E, Toronto</span></div>
+      <div class="card-note">Normally charges; free</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scadding+Cabin+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Scadding Cabin</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Exhibition Place, Toronto</span></div>
+      <div class="card-note">Open, pioneer cabin programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James%27+Cemetery+%26+Chapel+of+St.+James-the-Less+NHS+635+Parliament+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. James' Cemetery &amp; Chapel of St. James-the-Less NHS</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">635 Parliament St, Toronto</span></div>
+      <div class="card-note">Cemetery open but special heritage tours</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">WATERFRONT</span>
+    <h2 class="section-title">Waterfront / Harbourfront / Toronto Islands</h2>
+    <span class="section-note">Lake-facing heritage and infrastructure</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Redpath+Sugar+95+Queens+Quay+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Redpath Sugar</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">95 Queens Quay E, Toronto</span></div>
+      <div class="card-note">Industrial sugar refinery, working factory access</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fort+Rouill%C3%A9+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fort Rouillé</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Exhibition Place, Toronto</span></div>
+      <div class="card-note">Archaeological site, rarely accessible</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibraltar+Point+Centre+for+the+Arts+443+Lakeshore+Ave%2C+Toronto+Island" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Gibraltar Point Centre for the Arts</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">443 Lakeshore Ave, Toronto Island</span></div>
+      <div class="card-note">Limited public access; requires ferry</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Billy+Bishop+Toronto+City+Airport+2+Eireann+Quay%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Billy Bishop Toronto City Airport</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2 Eireann Quay, Toronto</span></div>
+      <div class="card-note">Underwater pedestrian tunnel, electric ferry, safety vehicles (Sat only)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TRCA+Head+Office+101+Exchange+Ave%2C+Vaughan" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">TRCA Head Office</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">101 Exchange Ave, Vaughan</span></div>
+      <div class="card-note">Toronto and Region Conservation Authority</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Waterworks+Food+Hall+505+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Waterworks Food Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">505 Richmond St W, Toronto</span></div>
+      <div class="card-note">Normally open, special programming</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">DISTILLERY</span>
+    <h2 class="section-title">Distillery District</h2>
+    
+  </div>
+  <div class="grid">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Spectrum+585+Dundas+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Daniels Spectrum</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">585 Dundas St E, Toronto</span></div>
+      <div class="card-note">Community arts hub, special programming</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">WEST</span>
+    <h2 class="section-title">West Toronto</h2>
+    <span class="section-note">Parkdale / Junction / Bloordale / Brockton — close to Bloor &amp; Ossington</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Netflix+Toronto+Office+486+Front+St+W+%28The+Well%29%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Netflix Toronto Office</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">486 Front St W (The Well), Toronto</span></div>
+      <div class="card-note">First-ever public opening — Canada's first Netflix office</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Polish+Combatants%27+Association+Branch+20+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Polish Combatants' Association Branch 20</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private veterans / cultural organization</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hacklab.TO+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Hacklab.TO</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private hackerspace</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Dine+Alone+Records+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Dine Alone Records</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private record label office</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fool%27s+Paradise+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fool's Paradise</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private creative space</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Corleck+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Corleck</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private heritage building</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Junction+Craft+Brewery+%28Symes+Road+Destructor%29+150+Symes+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Junction Craft Brewery (Symes Road Destructor)</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">150 Symes Rd, Toronto</span></div>
+      <div class="card-note">Rare access to historic destructor / incinerator building</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=All+Ours+Studios+62+Geary+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">All Ours Studios</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">62 Geary Ave, Toronto</span></div>
+      <div class="card-note">Converted warehouse + shipping containers artist studios</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Charles+Street+Video+76+Geary+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Charles Street Video</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">76 Geary Ave, Toronto</span></div>
+      <div class="card-note">Non-profit media arts org; equipment demos</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+213+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fire Station 213</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Fire hall access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Bakery+at+2+Fraser+Ave+2+Fraser+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Bakery at 2 Fraser Ave</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2 Fraser Ave, Toronto</span></div>
+      <div class="card-note">Creative / events space not normally public</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=UrbanArts+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">UrbanArts</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Arts org, limited public profile</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=West+Toronto+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">West Toronto Lawn Bowling Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private club</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Parkdale+Arts+and+Culture+Centre+Parkdale%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Parkdale Arts and Culture Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Parkdale, Toronto</span></div>
+      <div class="card-note">Special access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lula+Lounge+1585+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Lula Lounge</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1585 Dundas St W, Toronto</span></div>
+      <div class="card-note">Music venue, behind-scenes</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Contemporary+Art+Toronto+%28MOCA%29+158+Sterling+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Museum of Contemporary Art Toronto (MOCA)</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">158 Sterling Rd, Toronto</span></div>
+      <div class="card-note">Free admission (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Theatre+Passe+Muraille+16+Ryerson+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Theatre Passe Muraille</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">16 Ryerson Ave, Toronto</span></div>
+      <div class="card-note">Theatre behind-the-scenes</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=STACKT+market+28+Bathurst+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">STACKT market</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">28 Bathurst St, Toronto</span></div>
+      <div class="card-note">Normally open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Youngplace+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Youngplace</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">180 Shaw St, Toronto</span></div>
+      <div class="card-note">Community arts centre</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Assembly+Hall+1+Colonel+Samuel+Smith+Park+Dr%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Assembly Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1 Colonel Samuel Smith Park Dr, Toronto</span></div>
+      <div class="card-note">1898 Lakeshore Psychiatric Hospital building</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Addiction+and+Mental+Health+%28CAMH%29+1001+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Centre for Addiction and Mental Health (CAMH)</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1001 Queen St W, Toronto</span></div>
+      <div class="card-note">Campus tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Wychwood+Barns+601+Christie+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Wychwood Barns</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">601 Christie St, Toronto</span></div>
+      <div class="card-note">Normally accessible, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Young+Centre+for+the+Performing+Arts+50+Tank+House+Ln%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Young Centre for the Performing Arts</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">50 Tank House Ln, Toronto</span></div>
+      <div class="card-note">Normally accessible, behind-scenes</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">MIDTOWN</span>
+    <h2 class="section-title">Midtown / Yorkville / Annex / U of T</h2>
+    <span class="section-note">Compact walkable cluster around Bloor and Avenue Rd</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ismaili+Centre%2C+Toronto+49+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Ismaili Centre, Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">49 Wynford Dr, Toronto</span></div>
+      <div class="card-note">Fumihiko Maki-designed prayer hall — rarely open to non-community members</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Heliconian+Hall+35+Hazelton+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Heliconian Hall</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">35 Hazelton Ave, Toronto</span></div>
+      <div class="card-note">Private women's arts club, 1875 building</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Women%27s+Art+Association+of+Canada+23+Prince+Arthur+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Women's Art Association of Canada</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">23 Prince Arthur Ave, Toronto</span></div>
+      <div class="card-note">Private heritage club</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=InterAccess+Media+Art+Centre+950+Dupont+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">InterAccess Media Art Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">950 Dupont St, Toronto</span></div>
+      <div class="card-note">Private media arts org</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+Fire+Hall+30+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Old Fire Hall 30</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Decommissioned heritage fire hall</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Xpace+Cultural+Centre+2-303+Lansdowne+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Xpace Cultural Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2-303 Lansdowne Ave, Toronto</span></div>
+      <div class="card-note">Artist-run centre, limited public hours</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Joan+and+Martin+Goldfarb+Gallery+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Joan and Martin Goldfarb Gallery</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private gallery</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=KPMB+Architects+351+King+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">KPMB Architects</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">351 King St E, Toronto</span></div>
+      <div class="card-note">Working architecture studio</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Alliance+Fran%C3%A7aise+Toronto+24+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Alliance Française Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">24 Spadina Rd, Toronto</span></div>
+      <div class="card-note">Heritage building, language school (Sat only)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+315+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fire Station 315</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Fire hall access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=First+Narayever+Congregation+187+Brunswick+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">First Narayever Congregation</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">187 Brunswick Ave, Toronto</span></div>
+      <div class="card-note">Heritage synagogue (1923), limited public access normally</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Goethe-Institut+Toronto+100+University+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Goethe-Institut Toronto</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">100 University Ave, Toronto</span></div>
+      <div class="card-note">German cultural institute</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Manor+Road+United+Church+240+Manor+Rd+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Manor Road United Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">240 Manor Rd E, Toronto</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Rosedale+United+Church+159+Roxborough+Dr%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Rosedale United Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">159 Roxborough Dr, Toronto</span></div>
+      <div class="card-note">Heritage church, normally limited access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Thomas%27s+Anglican+Church+383+Huron+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Thomas's Anglican Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">383 Huron St, Toronto</span></div>
+      <div class="card-note">Heritage church tours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Hot+Docs+Ted+Rogers+Cinema+506+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Hot Docs Ted Rogers Cinema</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">506 Bloor St W, Toronto</span></div>
+      <div class="card-note">Free programming (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Bata+Shoe+Museum+327+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Bata Shoe Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">327 Bloor St W, Toronto</span></div>
+      <div class="card-note">Free admission (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Akin+Davisville+224+Merton+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Akin Davisville</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">224 Merton St, Toronto</span></div>
+      <div class="card-note">Artists' studios (Sat only)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Spadina+Museum+285+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Spadina Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">285 Spadina Rd, Toronto</span></div>
+      <div class="card-note">Free (normally charges); historic house museum</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Textile+Museum+of+Canada+55+Centre+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Textile Museum of Canada</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">55 Centre Ave, Toronto</span></div>
+      <div class="card-note">Free (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=University+of+Toronto+Bookstore+214+College+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">University of Toronto Bookstore</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">214 College St, Toronto</span></div>
+      <div class="card-note">Special behind-scenes access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=U+of+T+Department+of+Physics+60+St+George+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">U of T Department of Physics</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">60 St George St, Toronto</span></div>
+      <div class="card-note">15th floor observation deck access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Paul%27s+Bloor+Street+227+Bloor+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Paul's Bloor Street</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">227 Bloor St E, Toronto</span></div>
+      <div class="card-note">Open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Trinity-St.+Paul%27s+United+Church+427+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Trinity-St. Paul's United Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">427 Bloor St W, Toronto</span></div>
+      <div class="card-note">Open, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Estonian+Museum+Canada+958+Broadview+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Estonian Museum Canada</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">958 Broadview Ave, Toronto</span></div>
+      <div class="card-note">Open, special exhibits</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Building+%28U+of+T%29+1+Spadina+Cres%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Daniels Building (U of T)</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1 Spadina Cres, Toronto</span></div>
+      <div class="card-note">Open, new eco-timber building</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Blessed+Sacrament+Catholic+Church+24+Cheritan+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Blessed Sacrament Catholic Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">24 Cheritan Ave, Toronto</span></div>
+      <div class="card-note">100th anniversary programming</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">NORTH YORK</span>
+    <h2 class="section-title">North York / Uptown / North Toronto</h2>
+    <span class="section-note">Driving / transit cluster — Wynford Dr is unmissable</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Sringeri+Vidya+Bharati+Foundation+Canada+2180+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Sringeri Vidya Bharati Foundation Canada</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2180 Yonge St, Toronto</span></div>
+      <div class="card-note">9th-century Chola-style Hindu temple, 25 marble murals; guided tours + Bharatanatyam performances</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Archives+of+Ontario+134+Ian+Macdonald+Blvd%2C+York+University%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Archives of Ontario</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">134 Ian Macdonald Blvd, York University, Toronto</span></div>
+      <div class="card-note">Largest provincial archives in Canada; conservation labs, digitization studios (normally appointment-only, Sat only)</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=HOK+Toronto+Design+Studio+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">HOK Toronto Design Studio</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Global architecture firm, private office</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Justice+Leadership%2C+Humber+Polytechnic+3120+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Centre for Justice Leadership, Humber Polytechnic</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span><span class="badge badge-sun">Sat only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">3120 Lake Shore Blvd W, Toronto</span></div>
+      <div class="card-note">Mock courtroom, forensics lab, crime-scene lab (Sat only)</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Kadampa+Buddhist+Temple+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Kadampa Buddhist Temple</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Normally limited public access</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Water+Operations+Finch+Yard+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Water Operations Finch Yard</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Infrastructure facility, not normally open</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Japanese+Canadian+Cultural+Centre+6+Garamond+Ct%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Japanese Canadian Cultural Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">6 Garamond Ct, Toronto</span></div>
+      <div class="card-note">Special heritage access; adjacent to Aga Khan cluster</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Franklin+Carmichael+Art+Centre+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Franklin Carmichael Art Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Group of Seven connection, limited public hours</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Historic+Zion+Schoolhouse+1091+Finch+Ave+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Historic Zion Schoolhouse</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1091 Finch Ave E, Toronto</span></div>
+      <div class="card-note">19th century schoolhouse</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Aga+Khan+Museum+77+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Aga Khan Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">77 Wynford Dr, Toronto</span></div>
+      <div class="card-note">Free admission (normally charges); Fumihiko Maki; adjacent park + performances</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibson+House+Museum+5172+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Gibson House Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">5172 Yonge St, Toronto</span></div>
+      <div class="card-note">Free (normally charges)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Village+at+Black+Creek+1000+Murray+Ross+Pkwy%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">The Village at Black Creek</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1000 Murray Ross Pkwy, Toronto</span></div>
+      <div class="card-note">Free (normally charges); living history museum</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">EAST</span>
+    <h2 class="section-title">East Toronto</h2>
+    <span class="section-note">Danforth / Beaches / Leslieville / East York</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Historic+Don+Jail+at+Hennick+Bridgepoint+Hospital+550+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Historic Don Jail at Hennick Bridgepoint Hospital</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">550 Gerrard St E, Toronto</span></div>
+      <div class="card-note">Site of Canada's last legal execution; gallows + medical history access</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=R.C.+Harris+Water+Treatment+Plant+2701+Queen+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">R.C. Harris Water Treatment Plant</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2701 Queen St E, Toronto</span></div>
+      <div class="card-note">Art Deco masterpiece; interior almost never open</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=First+Russian+Congregation+of+Rodfesolium+Ansekiev+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">First Russian Congregation of Rodfesolium Ansekiev</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private heritage congregation</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Legion+Experience+Museum+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Legion Experience Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private veterans museum</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Haven+at+the+Crossroads+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Street Haven at the Crossroads</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Women's shelter, not normally toured</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Health+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Street Health</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Community health org, not normally toured</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+142+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fire Station 142</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Fire hall access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Danforth+Mennonite+Church+2174+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Danforth Mennonite Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">2174 Danforth Ave, Toronto</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Messiah+240+Avenue+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Church of the Messiah</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">240 Avenue Rd, Toronto</span></div>
+      <div class="card-note">Heritage church, Anglican</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Barnabas+on+the+Danforth+Anglican+Church+361+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Barnabas on the Danforth Anglican Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">361 Danforth Ave, Toronto</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Peter%27s+Estonian+Evangelical+Lutheran+Church+817+Mount+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. Peter's Estonian Evangelical Lutheran Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">817 Mount Pleasant Rd, Toronto</span></div>
+      <div class="card-note">Cultural heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Kew+Beach+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Kew Beach Lawn Bowling Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Private club</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Evergreen+Brick+Works+550+Bayview+Ave%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Evergreen Brick Works</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">550 Bayview Ave, Toronto</span></div>
+      <div class="card-note">Free (normally charges for some programs)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Todmorden+Mills+67+Pottery+Rd%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Todmorden Mills</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">67 Pottery Rd, Toronto</span></div>
+      <div class="card-note">Heritage museum, free</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Riverdale+Hub+1326+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Riverdale Hub</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1326 Gerrard St E, Toronto</span></div>
+      <div class="card-note">Community centre, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Argonaut+Rowing+Club+1225+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Argonaut Rowing Club</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-sun">Sun only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1225 Lake Shore Blvd W, Toronto</span></div>
+      <div class="card-note">Normally members-only; structured tours (Sun only)</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">SCARBOROUGH</span>
+    <h2 class="section-title">Scarborough</h2>
+    
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=ZooShare+Biogas+Plant+Toronto+Zoo%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">ZooShare Biogas Plant</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto Zoo, Scarborough</span></div>
+      <div class="card-note">Biogas facility using zoo waste; genuinely rare industrial access</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Muslims+in+Canada+Archives+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Muslims in Canada Archives</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Scarborough</span></div>
+      <div class="card-note">Private archival institution</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hillside+Outdoor+Education+School+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Hillside Outdoor Education School</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Scarborough</span></div>
+      <div class="card-note">School facility not normally open</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Archives+%26+Research+Centre+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Scarborough Archives &amp; Research Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Scarborough</span></div>
+      <div class="card-note">Specialized archive</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+442+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Fire Station 442</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Scarborough</span></div>
+      <div class="card-note">Fire hall access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Knox+United+Church%2C+Agincourt+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Knox United Church, Agincourt</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Scarborough</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Pan+Am+Sports+Centre+875+Morningside+Ave%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Toronto Pan Am Sports Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">875 Morningside Ave, Scarborough</span></div>
+      <div class="card-note">Free (normally charges for recreation use)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Clark+Centre+for+the+Arts+191+Guildwood+Pkwy%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Clark Centre for the Arts</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">191 Guildwood Pkwy, Scarborough</span></div>
+      <div class="card-note">Arts centre, free programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Cedar+Ridge+Creative+Centre+225+Confederation+Dr%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Cedar Ridge Creative Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">225 Confederation Dr, Scarborough</span></div>
+      <div class="card-note">Historic estate / gallery, special access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=John+McKenzie+House+34+Parkview+Ave%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">John McKenzie House</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">34 Parkview Ave, Scarborough</span></div>
+      <div class="card-note">Historic house museum</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Museum+1007+Brimley+Rd%2C+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Scarborough Museum</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">1007 Brimley Rd, Scarborough</span></div>
+      <div class="card-note">Free (normally charges)</div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-day">ETOBICOKE</span>
+    <h2 class="section-title">Etobicoke / Weston / Humber</h2>
+    <span class="section-note">Western suburbs heritage</span>
+  </div>
+  <div class="grid">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=YZD+Experience+Centre+Etobicoke+%28Pearson-adjacent%29" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">YZD Experience Centre</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Etobicoke (Pearson-adjacent)</span></div>
+      <div class="card-note">Pearson-adjacent; limited source detail</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Weston+Masonic+Temple+Weston%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Weston Masonic Temple</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Weston, Toronto</span></div>
+      <div class="card-note">Masonic lodge, private</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ukrainian+Catholic+Church+of+the+Holy+Protection+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Ukrainian Catholic Church of the Holy Protection</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">Heritage church, limited public access</div>
+    </a>
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Mabelle+Park+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Mabelle Park</div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
+      <div class="card-note">Community-built park, special programming</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lambton+House+4066+Old+Dundas+St%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Lambton House</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">4066 Old Dundas St, Toronto</span></div>
+      <div class="card-note">1847 heritage inn, limited hours normally</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Valley+United+Church+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Humber Valley United Church</div>
+        <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Montgomery%27s+Inn+4709+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Montgomery's Inn</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">4709 Dundas St W, Toronto</span></div>
+      <div class="card-note">Free (normally charges); 1830s heritage inn</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Cultural+Hub+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Humber Cultural Hub</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
+      <div class="card-note">Special access</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Lakeshore+Arts+and+Media+Studios+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Humber Lakeshore Arts and Media Studios</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">Toronto</span></div>
+      <div class="card-note">College studios</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Applewood+Shaver+House+450+The+West+Mall%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">Applewood Shaver House</div>
+        <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sun only</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">450 The West Mall, Toronto</span></div>
+      <div class="card-note">Birthplace of J.S. Woodsworth; 1851 house moved to preserve it (Sun only)</div>
+    </a>
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Church+On+The+Hill+4600+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="card-name">St. George's Church On The Hill</div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
+      </div>
+      <div class="card-meta"><span class="card-addr">4600 Dundas St W, Toronto</span></div>
+      <div class="card-note">Heritage church</div>
+    </a>
+  </div>
+</section>
+<!-- ════════════════ OUT-OF-RANGE CINEMAS ════════════════ -->
+<section class="section film">
+  <div class="section-header">
+    <span class="section-day">BEYOND 10 KM</span>
+    <h2 class="section-title">Other Cineplex Locations Showing Obsession</h2>
+    <span class="section-note">Filtered out of main list · Showtimes not confirmed</span>
+  </div>
+  <div class="sub-label">All confirmed playing Obsession May 23 via Cineplex app · check cineplex.com for live times</div>
+
+  <div class="grid">
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Cinemas+Vaughan+3555+Highway+7" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Vaughan</div></div>
+      <div class="card-meta"><span class="card-addr">3555 Highway 7 W, Vaughan · 16 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Mississauga+Square+One" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Mississauga Square One</div></div>
+      <div class="card-meta"><span class="card-addr">309 Rathburn Rd W, Mississauga · 22 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Morningside+785+Milner+Scarborough" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Odeon Morningside</div></div>
+      <div class="card-meta"><span class="card-addr">785 Milner Ave, Scarborough · 22 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Courtney+Park+Mississauga" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Courtney Park</div></div>
+      <div class="card-meta"><span class="card-addr">110 Courtneypark Dr E, Mississauga · 24 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Winston+Churchill+Oakville" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Winston Churchill &amp; VIP</div></div>
+      <div class="card-meta"><span class="card-addr">2081 Winston Park Dr, Oakville · 27 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Junxion+Erin+Mills+Mississauga" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Junxion Erin Mills</div></div>
+      <div class="card-meta"><span class="card-addr">5100 Erin Mills Pkwy, Mississauga · 28 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Brampton+Cineplex" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">SilverCity Brampton</div></div>
+      <div class="card-meta"><span class="card-addr">50 Great Lakes Dr, Brampton · 31 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Milton+Maple+Avenue" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Milton</div></div>
+      <div class="card-meta"><span class="card-addr">1175 Maple Ave, Milton · 40 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Aurora+Bayview" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Odeon Aurora</div></div>
+      <div class="card-meta"><span class="card-addr">15460 Bayview Ave, Aurora · 40 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Oakville+VIP+Wyecroft" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">Cineplex Oakville &amp; VIP</div></div>
+      <div class="card-meta"><span class="card-addr">3531 Wyecroft Rd, Oakville · 41 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Newmarket+Yonge" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">SilverCity Newmarket</div></div>
+      <div class="card-meta"><span class="card-addr">18195 Yonge St, Newmarket · 47 km</span></div>
+    </a>
+    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Burlington+Brant" target="_blank" rel="noopener">
+      <div class="card-top"><div class="card-name">SilverCity Burlington</div></div>
+      <div class="card-meta"><span class="card-addr">1250 Brant St, Burlington · 49 km</span></div>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-title">Legend &amp; notes</div>
+    <div class="legend">
+      <div class="legend-item">🔴 Never / almost never open</div>
+      <div class="legend-item">🟠 Rare (private / special only)</div>
+      <div class="legend-item">🟡 Fee or appointment normally</div>
+      <div class="legend-item">🟢 Open regularly, special programming</div>
+      <div class="legend-item">★ New 2026 participant</div>
+      <div class="legend-item"><span style="width:18px;height:12px;background:#1a1614;display:inline-block;border-radius:2px;"></span> Standout (never-open site)</div>
+    </div>
+    <div class="footer-flag"><strong>⚑ Heads up:</strong> Lower Bay Station is NOT participating in 2026 — often listed in third-party guides. Do not plan around it.</div>
+    <div class="footer-note">
+      168 official Doors Open 2026 sites (some downtown architecture studios shown grouped — Giaimo / DIALOG / Gow Hastings / DTAH / Q4 / Taylor Hazell / Turner Fleischer = 7 separate venues).
+      Sat May 23 only: 401 Richmond, Alliance Française, Akin Davisville, Archives of Ontario, Centre for Justice Leadership, Billy Bishop Airport.
+      Sun May 24 only: Argonaut Rowing Club, Applewood Shaver House.
+      All other sites open both days, 10am – 5pm.
+      Showtime data confirmed from Cineplex app screenshots May 19, 2026 for 6 in-range cinemas. Out-of-range cinema list is from Cineplex app confirming Obsession is playing — exact showtimes not extracted.
+      Rarity rankings are editorial judgments based on normal public access patterns.
+      Sources: toronto.ca/doorsopen, doorsopenontario.on.ca, Cineplex app. Cards open Google Maps search — venue may resolve to nearby alternatives where exact address is missing.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
