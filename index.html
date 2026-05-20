@@ -401,7 +401,25 @@
   .mini-vote { font-size: 10px; padding: 6px 9px; letter-spacing: 0.04em; }
 }
 
+
+  /* ── PER-CLUSTER MAPS ────────────────────────────────────── */
+  .section-map { height: 220px; width: 100%; margin: 12px 0 16px 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #e8e3d4; position: relative; }
+  .section-map .leaflet-control-attribution { font-size: 9px !important; padding: 1px 5px !important; background: rgba(255,255,255,0.75) !important; }
+  .section-map .leaflet-marker-icon { cursor: pointer; }
+  .map-pin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+  .map-pin.cinema { background: #c0392b; width: 16px; height: 16px; }
+  .map-pin.standout { background: #1a1614; }
+  .map-pin.notable { background: #b8860b; }
+  .map-legend { position: absolute; bottom: 6px; left: 8px; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 3px; font-size: 10px; font-weight: 500; color: #1a1614; z-index: 400; display: flex; gap: 10px; letter-spacing: 0.02em; }
+  .map-legend-item { display: flex; align-items: center; gap: 4px; }
+  .map-legend-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid white; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+  @media (max-width: 600px) {
+    .section-map { height: 160px; }
+    .map-legend { font-size: 9px; gap: 7px; padding: 3px 6px; }
+  }
+
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 </head>
 <body>
 <a id="top"></a>
@@ -522,6 +540,7 @@
     <h2 class="section-title">Downtown Core</h2>
     <span class="section-note">Densest Doors Open walk in the city · 2 Cineplex theatres in this stack</span>
   </div>
+  <div class="section-map" id="map-downtown"></div>
   <div class="grid">
     <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Scotiabank+Theatre+Toronto+259+Richmond+Street+West" target="_blank" rel="noopener">
       <div class="cinema-tag-row">
@@ -854,6 +873,7 @@
     <h2 class="section-title">Old Town / Port Lands / East Downtown</h2>
     <span class="section-note">Heritage industrial + new Indigenous & Port Lands sites · nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
+  <div class="section-map" id="map-oldtown"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=25+Ookwemin+Street+281+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
@@ -944,6 +964,7 @@
     <h2 class="section-title">Waterfront / Harbourfront / Toronto Islands</h2>
     <span class="section-note">Lake-facing heritage and infrastructure · nearest Cineplex: Scotiabank (Downtown)</span>
   </div>
+  <div class="section-map" id="map-waterfront"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Redpath+Sugar+95+Queens+Quay+E%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1002,6 +1023,7 @@
     <h2 class="section-title">Distillery District</h2>
     <span class="section-note">Nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
+  <div class="section-map" id="map-distillery"></div>
   <div class="grid">
     <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Spectrum+585+Dundas+St+E%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1020,6 +1042,7 @@
     <h2 class="section-title">West Toronto</h2>
     <span class="section-note">Parkdale / Junction / Bloordale / Brockton · Bloor &amp; Ossington home turf · nearest Cineplex: Varsity (Midtown)</span>
   </div>
+  <div class="section-map" id="map-west"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Netflix+Toronto+Office+486+Front+St+W+%28The+Well%29%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1214,6 +1237,7 @@
     <h2 class="section-title">Midtown / Yorkville / Annex / U of T</h2>
     <span class="section-note">Compact walkable cluster · 1 Cineplex theatre in this stack</span>
   </div>
+  <div class="section-map" id="map-midtown"></div>
   <div class="grid">
     <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Varsity+VIP+55+Bloor+Street+West+Toronto" target="_blank" rel="noopener">
       <div class="cinema-tag-row">
@@ -1453,6 +1477,7 @@
     <h2 class="section-title">North York / Uptown / North Toronto</h2>
     <span class="section-note">Driving / transit cluster · 3 Cineplex theatres in this stack</span>
   </div>
+  <div class="section-map" id="map-northyork"></div>
   <div class="grid">
     <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Eglinton+VIP+2300+Yonge+Street+Toronto" target="_blank" rel="noopener">
       <div class="cinema-tag-row">
@@ -1598,6 +1623,7 @@
     <h2 class="section-title">East Toronto</h2>
     <span class="section-note">Danforth / Beaches / Leslieville / East York · nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
+  <div class="section-map" id="map-east"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Historic+Don+Jail+at+Hennick+Bridgepoint+Hospital+550+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1736,6 +1762,7 @@
     <h2 class="section-title">Scarborough</h2>
     <span class="section-note">Nearest in-range Cineplex: Don Mills (15+ km) · consider out-of-range Morningside (22 km)</span>
   </div>
+  <div class="section-map" id="map-scarborough"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=ZooShare+Biogas+Plant+Toronto+Zoo%2C+Scarborough" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1834,6 +1861,7 @@
     <h2 class="section-title">Etobicoke / Weston / Humber</h2>
     <span class="section-note">Western suburbs · nearest in-range Cineplex: Varsity (Midtown)</span>
   </div>
+  <div class="section-map" id="map-etobicoke"></div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=YZD+Experience+Centre+Etobicoke+%28Pearson-adjacent%29" target="_blank" rel="noopener">
       <div class="card-top">
@@ -1932,6 +1960,7 @@
     <h2 class="section-title">Other Cineplex Locations</h2>
     <span class="section-note">Confirmed playing Obsession · showtimes not extracted</span>
   </div>
+  <div class="section-map" id="map-faraway"></div>
   <div class="sub-label">Check cineplex.com for live May 23 showtimes</div>
 
   <div class="grid">
@@ -2230,7 +2259,70 @@
     mini.classList.toggle('show', window.scrollY > 240);
   }
 
+  
+  // ── Maps ───────────────────────────────────────────────────
+  var MAPS_DATA = {"map-downtown":{"center":[43.652,-79.382],"zoom":14,"markers":[{"lat":43.6479,"lng":-79.3897,"name":"Scotiabank Theatre","type":"cinema"},{"lat":43.6562,"lng":-79.3805,"name":"Cineplex Yonge-Dundas","type":"cinema"},{"lat":43.6529,"lng":-79.3814,"name":"Old City Hall","type":"standout"},{"lat":43.6519,"lng":-79.3856,"name":"Osgoode Hall","type":"standout"},{"lat":43.6534,"lng":-79.3839,"name":"Toronto City Hall","type":"notable"},{"lat":43.647,"lng":-79.3923,"name":"TIFF Lightbox","type":"notable"},{"lat":43.6418,"lng":-79.3848,"name":"Steam Whistle Brewing","type":"notable"},{"lat":43.6529,"lng":-79.3858,"name":"Campbell House Museum","type":"notable"},{"lat":43.6505,"lng":-79.3739,"name":"St. James Cathedral","type":"notable"},{"lat":43.6498,"lng":-79.3719,"name":"St. Lawrence Hall","type":"notable"},{"lat":43.648,"lng":-79.3795,"name":"Toronto-Dominion Centre","type":"notable"}]},"map-oldtown":{"center":[43.652,-79.35],"zoom":14,"markers":[{"lat":43.6447,"lng":-79.3505,"name":"25 Ookwemin Street","type":"standout"},{"lat":43.6535,"lng":-79.3601,"name":"Anishnawbe Health Toronto","type":"standout"},{"lat":43.6633,"lng":-79.3367,"name":"433 Eastern Yard","type":"standout"},{"lat":43.6479,"lng":-79.4002,"name":"401 Richmond Ltd. (Sat only)","type":"standout"},{"lat":43.6517,"lng":-79.376,"name":"Mackenzie House","type":"notable"},{"lat":43.6494,"lng":-79.3722,"name":"The Market Gallery","type":"notable"}]},"map-waterfront":{"center":[43.636,-79.39],"zoom":13,"markers":[{"lat":43.6286,"lng":-79.3961,"name":"Billy Bishop Airport (Sat)","type":"notable"},{"lat":43.642,"lng":-79.368,"name":"Redpath Sugar","type":"standout"},{"lat":43.6195,"lng":-79.3935,"name":"Gibraltar Point (Islands)","type":"standout"},{"lat":43.6308,"lng":-79.4304,"name":"Argonaut Rowing Club (Sun)","type":"notable"}]},"map-distillery":{"center":[43.65,-79.3597],"zoom":15,"markers":[{"lat":43.6603,"lng":-79.3604,"name":"Daniels Spectrum","type":"notable"}]},"map-west":{"center":[43.65,-79.435],"zoom":13,"markers":[{"lat":43.6437,"lng":-79.399,"name":"Netflix Toronto (The Well)","type":"standout"},{"lat":43.668,"lng":-79.447,"name":"Junction Craft (Symes Destructor)","type":"standout"},{"lat":43.6705,"lng":-79.4385,"name":"All Ours Studios / Charles St Video (Geary)","type":"standout"},{"lat":43.6473,"lng":-79.4444,"name":"Museum of Contemporary Art (MOCA)","type":"notable"},{"lat":43.5946,"lng":-79.5108,"name":"Assembly Hall","type":"notable"},{"lat":43.6432,"lng":-79.4214,"name":"Centre for Addiction & Mental Health","type":"notable"},{"lat":43.6776,"lng":-79.4233,"name":"Wychwood Barns","type":"notable"}]},"map-midtown":{"center":[43.67,-79.396],"zoom":14,"markers":[{"lat":43.671,"lng":-79.3858,"name":"Cineplex Varsity & VIP","type":"cinema"},{"lat":43.6736,"lng":-79.3915,"name":"Heliconian Hall","type":"standout"},{"lat":43.6737,"lng":-79.3934,"name":"Women's Art Association","type":"standout"},{"lat":43.6671,"lng":-79.4001,"name":"Bata Shoe Museum","type":"notable"},{"lat":43.666,"lng":-79.4097,"name":"Hot Docs Ted Rogers Cinema","type":"notable"},{"lat":43.6657,"lng":-79.4002,"name":"U of T Department of Physics","type":"notable"},{"lat":43.6741,"lng":-79.3993,"name":"Goethe-Institut / Alliance Fran\u00e7aise","type":"standout"},{"lat":43.6748,"lng":-79.4067,"name":"Spadina Museum","type":"notable"},{"lat":43.663,"lng":-79.3879,"name":"KPMB Architects","type":"standout"},{"lat":43.6573,"lng":-79.4007,"name":"Daniels Building (U of T)","type":"notable"}]},"map-northyork":{"center":[43.715,-79.37],"zoom":12,"markers":[{"lat":43.7062,"lng":-79.3984,"name":"Cineplex Yonge-Eglinton","type":"cinema"},{"lat":43.7251,"lng":-79.4519,"name":"Cineplex Yorkdale","type":"cinema"},{"lat":43.7349,"lng":-79.3439,"name":"Cineplex VIP Don Mills (19+)","type":"cinema"},{"lat":43.7037,"lng":-79.3985,"name":"Sringeri Vidya Bharati Foundation \u2605","type":"standout"},{"lat":43.7253,"lng":-79.3265,"name":"Ismaili Centre \u2605","type":"standout"},{"lat":43.7256,"lng":-79.3274,"name":"Aga Khan Museum","type":"notable"},{"lat":43.7257,"lng":-79.3293,"name":"Japanese Canadian Cultural Centre","type":"standout"},{"lat":43.7741,"lng":-79.5025,"name":"Archives of Ontario \u2605 (Sat)","type":"standout"},{"lat":43.7795,"lng":-79.4163,"name":"Kadampa Buddhist Temple","type":"standout"},{"lat":43.77,"lng":-79.506,"name":"Village at Black Creek","type":"notable"},{"lat":43.7064,"lng":-79.3936,"name":"Akin Davisville (Sat)","type":"notable"},{"lat":43.717,"lng":-79.399,"name":"Blessed Sacrament Church \u2605","type":"notable"}]},"map-east":{"center":[43.677,-79.321],"zoom":13,"markers":[{"lat":43.6708,"lng":-79.2828,"name":"R.C. Harris Water Treatment","type":"standout"},{"lat":43.6612,"lng":-79.3535,"name":"Historic Don Jail","type":"standout"},{"lat":43.6837,"lng":-79.3661,"name":"Evergreen Brick Works","type":"notable"},{"lat":43.6837,"lng":-79.3522,"name":"Todmorden Mills","type":"notable"},{"lat":43.68,"lng":-79.337,"name":"Riverdale Hub","type":"notable"},{"lat":43.6745,"lng":-79.336,"name":"St. Barnabas Danforth","type":"standout"}]},"map-scarborough":{"center":[43.77,-79.24],"zoom":12,"markers":[{"lat":43.8202,"lng":-79.1846,"name":"ZooShare Biogas Plant","type":"standout"},{"lat":43.777,"lng":-79.24,"name":"Scarborough Museum","type":"notable"},{"lat":43.7847,"lng":-79.1925,"name":"Toronto Pan Am Sports Centre","type":"notable"},{"lat":43.7505,"lng":-79.1909,"name":"Clark Centre for the Arts","type":"notable"},{"lat":43.7567,"lng":-79.237,"name":"Cedar Ridge Creative Centre","type":"notable"},{"lat":43.7691,"lng":-79.2553,"name":"John McKenzie House","type":"notable"}]},"map-etobicoke":{"center":[43.64,-79.54],"zoom":12,"markers":[{"lat":43.6492,"lng":-79.5547,"name":"Montgomery's Inn","type":"notable"},{"lat":43.6058,"lng":-79.5475,"name":"Applewood Shaver House (Sun)","type":"standout"},{"lat":43.5928,"lng":-79.5128,"name":"Centre for Justice Leadership \u2605 (Sat)","type":"standout"},{"lat":43.685,"lng":-79.518,"name":"Lambton House","type":"standout"},{"lat":43.6738,"lng":-79.4892,"name":"Mabelle Park","type":"standout"}]},"map-faraway":{"center":[43.7,-79.6],"zoom":9,"markers":[{"lat":43.7889,"lng":-79.535,"name":"Cineplex Vaughan","type":"cinema"},{"lat":43.5915,"lng":-79.642,"name":"Cineplex Mississauga Square One","type":"cinema"},{"lat":43.774,"lng":-79.203,"name":"Cineplex Odeon Morningside","type":"cinema"},{"lat":43.621,"lng":-79.685,"name":"Cineplex Courtney Park","type":"cinema"},{"lat":43.5236,"lng":-79.706,"name":"Cineplex Winston Churchill","type":"cinema"},{"lat":43.546,"lng":-79.717,"name":"Cineplex Junxion Erin Mills","type":"cinema"},{"lat":43.728,"lng":-79.766,"name":"SilverCity Brampton","type":"cinema"},{"lat":43.518,"lng":-79.877,"name":"Cineplex Milton","type":"cinema"},{"lat":44.005,"lng":-79.448,"name":"Cineplex Odeon Aurora","type":"cinema"},{"lat":43.448,"lng":-79.681,"name":"Cineplex Oakville & VIP","type":"cinema"},{"lat":44.051,"lng":-79.486,"name":"SilverCity Newmarket","type":"cinema"},{"lat":43.37,"lng":-79.796,"name":"SilverCity Burlington","type":"cinema"}]}};
+  var MAPS_INITIALIZED = {};
+  function initMap(mapId) {
+    if (typeof L === 'undefined') return;
+    if (MAPS_INITIALIZED[mapId]) return;
+    var cfg = MAPS_DATA[mapId];
+    var el = document.getElementById(mapId);
+    if (!cfg || !el) return;
+    var map = L.map(mapId, {
+      center: cfg.center, zoom: cfg.zoom,
+      zoomControl: false, scrollWheelZoom: false,
+      dragging: true, doubleClickZoom: false,
+      touchZoom: false, keyboard: false,
+      attributionControl: true
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org/copyright">OSM</a>',
+      maxZoom: 19
+    }).addTo(map);
+    cfg.markers.forEach(function(m) {
+      var icon = L.divIcon({
+        className: 'custom-pin-wrap',
+        html: '<div class="map-pin ' + m.type + '"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+      });
+      var marker = L.marker([m.lat, m.lng], {icon: icon}).addTo(map);
+      marker.bindTooltip(m.name, {direction: 'top', offset: [0, -8], className: 'map-tooltip'});
+      marker.on('click', function() {
+        var q = encodeURIComponent(m.name + ' Toronto');
+        window.open('https://www.google.com/maps/search/?api=1&query=' + q, '_blank');
+      });
+    });
+    // Add legend overlay
+    var legend = document.createElement('div');
+    legend.className = 'map-legend';
+    legend.innerHTML = '<span class="map-legend-item"><span class="map-legend-dot" style="background:#c0392b"></span>Cinema</span><span class="map-legend-item"><span class="map-legend-dot" style="background:#1a1614"></span>🔴 site</span><span class="map-legend-item"><span class="map-legend-dot" style="background:#b8860b"></span>🟡 site</span>';
+    el.appendChild(legend);
+    MAPS_INITIALIZED[mapId] = true;
+  }
+  function setupMapObserver() {
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback: init all immediately
+      Object.keys(MAPS_DATA).forEach(initMap);
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          initMap(entry.target.id);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {rootMargin: '300px'});
+    document.querySelectorAll('.section-map').forEach(function(el) {
+      obs.observe(el);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    setupMapObserver();
+
     // Wire chips
     document.querySelectorAll('.voter-chip').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -2262,5 +2354,6 @@
 </script>
 
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
 </html>
