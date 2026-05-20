@@ -448,6 +448,115 @@ body { padding-top: 64px; scroll-padding-top: 60px; }
   .mini-legend { font-size: 14px; gap: 4px; }
   .mini-vote { font-size: 13px; padding: 6px 10px; }
 }
+
+.filterbar {
+  position: sticky;
+  top: 64px;
+  z-index: 9990;
+  background: #1a1614;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.filterbar-summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  max-width: 1100px; margin: 0 auto;
+}
+.filter-toggle {
+  background: rgba(255,255,255,0.08); color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 6px;
+  padding: 7px 12px; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  transition: all 0.15s; font-family: inherit;
+}
+.filter-toggle:hover { background: rgba(255,255,255,0.15); }
+.filter-toggle[aria-expanded="true"] .filter-chevron { transform: rotate(180deg); }
+.filter-chevron { font-size: 9px; transition: transform 0.2s; opacity: 0.7; }
+.filter-active-count {
+  background: var(--cinema); color: #fff;
+  padding: 1px 8px; border-radius: 10px; font-size: 11px;
+  font-weight: 700;
+}
+.filter-results {
+  color: var(--muted); font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  margin-left: auto;
+}
+.filter-clear {
+  background: transparent; color: var(--gold);
+  border: 1px solid rgba(184,134,11,0.4); border-radius: 6px;
+  padding: 6px 11px; font-size: 12px; font-weight: 700;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;
+  font-family: 'Inter', sans-serif;
+}
+.filter-clear:hover { background: rgba(184,134,11,0.18); }
+
+.filterbar-body {
+  padding: 0 16px 16px;
+  max-width: 1100px; margin: 0 auto;
+  max-height: 70vh; overflow-y: auto;
+}
+.filter-search {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,0.06); color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 6px;
+  padding: 10px 14px; font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 14px;
+}
+.filter-search:focus { outline: none; border-color: var(--gold); }
+.filter-group { margin-bottom: 14px; }
+.filter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--muted); margin-bottom: 7px; font-weight: 700;
+}
+.filter-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.chip {
+  background: rgba(255,255,255,0.04);
+  color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 6px 11px;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: all 0.12s;
+  line-height: 1.2;
+}
+.chip:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.25); }
+.chip.active {
+  background: var(--gold); color: var(--ink);
+  border-color: var(--gold);
+  font-weight: 700;
+}
+.chip-n {
+  font-size: 10px; opacity: 0.7;
+  padding-left: 3px; font-weight: 700;
+}
+.chip.active .chip-n { opacity: 0.85; }
+.no-results-banner {
+  text-align: center; padding: 60px 20px;
+  color: var(--muted); font-family: 'Inter', sans-serif;
+  display: none;
+}
+.no-results-banner.show { display: block; }
+
+@media (max-width: 600px) {
+  .filterbar { top: 56px; }
+  .filterbar-summary { padding: 8px 12px; gap: 8px; }
+  .filter-toggle { font-size: 12px; padding: 6px 10px; }
+  .filter-results { font-size: 11px; }
+  .filter-clear { font-size: 10px; padding: 5px 8px; }
+  .filterbar-body { padding: 0 12px 12px; }
+  .chip { font-size: 11px; padding: 5px 9px; }
+}
+
+.card-hidden { display: none !important; }
+.section-hidden { display: none !important; }
 </style>
 <style id="leaflet-inline">
 /* required styles */
@@ -1125,6 +1234,70 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </div>
 
 
+<div class="filterbar" id="filterbar">
+  <div class="filterbar-summary">
+    <button class="filter-toggle" id="filterToggle" aria-expanded="false">
+      <span>⚙ Filters</span>
+      <span class="filter-active-count" id="filterActiveCount" hidden></span>
+      <span class="filter-chevron">▼</span>
+    </button>
+    <span class="filter-results" id="filterResults">154 sites</span>
+    <button class="filter-clear" id="filterClear" hidden>Clear all</button>
+  </div>
+  <div class="filterbar-body" id="filterbarBody" hidden>
+    <input type="search" class="filter-search" id="filterSearch" placeholder="Search name or notes…" autocomplete="off">
+
+    <div class="filter-group">
+      <div class="filter-label">Rarity</div>
+      <div class="filter-chips"><button class="chip" data-filter="rarity" data-value="never-open">🔴 Never open <span class="chip-n">44</span></button>
+<button class="chip" data-filter="rarity" data-value="rare">🟠 Rare <span class="chip-n">43</span></button>
+<button class="chip" data-filter="rarity" data-value="fee-normally">🟡 Fee normally <span class="chip-n">39</span></button>
+<button class="chip" data-filter="rarity" data-value="special-programming">🟢 Special programming <span class="chip-n">28</span></button></div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-label">Type</div>
+      <div class="filter-chips"><button class="chip" data-filter="type" data-value="religious"> Religious / Worship <span class="chip-n">31</span></button>
+<button class="chip" data-filter="type" data-value="museum"> Museum / Gallery <span class="chip-n">22</span></button>
+<button class="chip" data-filter="type" data-value="arts-creative"> Arts / Creative <span class="chip-n">15</span></button>
+<button class="chip" data-filter="type" data-value="educational"> Educational <span class="chip-n">14</span></button>
+<button class="chip" data-filter="type" data-value="government"> Government / Civic <span class="chip-n">13</span></button>
+<button class="chip" data-filter="type" data-value="historic"> Historic / Heritage <span class="chip-n">13</span></button>
+<button class="chip" data-filter="type" data-value="industrial"> Industrial / Infrastructure <span class="chip-n">10</span></button>
+<button class="chip" data-filter="type" data-value="performing-arts"> Performing Arts <span class="chip-n">7</span></button>
+<button class="chip" data-filter="type" data-value="health-social"> Health / Social <span class="chip-n">7</span></button>
+<button class="chip" data-filter="type" data-value="cultural-centre"> Cultural Centre <span class="chip-n">5</span></button>
+<button class="chip" data-filter="type" data-value="park-outdoor"> Park / Outdoor <span class="chip-n">4</span></button>
+<button class="chip" data-filter="type" data-value="sports-recreation"> Sports / Recreation <span class="chip-n">4</span></button>
+<button class="chip" data-filter="type" data-value="other"> Other <span class="chip-n">3</span></button>
+<button class="chip" data-filter="type" data-value="office-private"> Office / Private <span class="chip-n">3</span></button>
+<button class="chip" data-filter="type" data-value="architecture"> Architecture Studio <span class="chip-n">3</span></button></div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-label">Neighborhood</div>
+      <div class="filter-chips"><button class="chip" data-filter="neighborhood" data-value="downtown"> Downtown <span class="chip-n">37</span></button>
+<button class="chip" data-filter="neighborhood" data-value="None"> None <span class="chip-n">106</span></button>
+<button class="chip" data-filter="neighborhood" data-value="scarborough"> Scarborough <span class="chip-n">11</span></button></div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-label">Extras</div>
+      <div class="filter-chips">
+        <button class="chip" data-filter="new" data-value="true">★ New for 2026 <span class="chip-n">9</span></button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-label">Walking-range to film plan</div>
+      <div class="filter-chips"><button class="chip" data-filter="plan" data-value="plan1"> Plan 1: Scotiabank 6:50 (Downtown)</button>
+<button class="chip" data-filter="plan" data-value="plan2"> Plan 2: Varsity 5:10 (Midtown)</button>
+<button class="chip" data-filter="plan" data-value="plan3"> Plan 3: Yonge-Eg 1:00 (Midtown/NY)</button>
+<button class="chip" data-filter="plan" data-value="plan4"> Plan 4: Don Mills 3:00 (NY)</button></div>
+    </div>
+  </div>
+</div>
+
 <header class="header">
   <div class="header-inner">
     <div class="brand-row">
@@ -1227,7 +1400,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <main class="main">
 
-<section class="section">
+<section class="section" data-neighborhood-section="downtown">
   <div class="section-header">
     <span class="section-day">DOWNTOWN</span>
     <h2 class="section-title">Downtown Core</h2>
@@ -1261,7 +1434,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="cinema-pairing">Same Downtown Core cluster as Scotiabank. Also close: TMU Architectural Science 🟡, Toronto Humane Society 🟡.</div>
       <div class="recommend">→ 4:20 PM Regular leaves the full Doors Open day intact</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+City+Hall+60+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+City+Hall+60+Queen+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="old city hall vacant since 2025 court relocation; ornate interiors + secret courtyard, normally completely inaccessible">
       <div class="card-top">
         <div class="card-name">Old City Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1269,7 +1442,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">60 Queen St W, Toronto</span></div>
       <div class="card-note">Vacant since 2025 court relocation; ornate interiors + secret courtyard, normally completely inaccessible</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Star+1+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Star+1+Yonge+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto star working newsroom, rarely opened to public">
       <div class="card-top">
         <div class="card-name">Toronto Star</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1277,7 +1450,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1 Yonge St, Toronto</span></div>
       <div class="card-note">Working newsroom, rarely opened to public</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=TVO+Studio+Tour+%26+Experience+2180+Yonge+St+area%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=TVO+Studio+Tour+%26+Experience+2180+Yonge+St+area%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="other" data-neighborhood="downtown" data-plans="plan1 plan2" data-new="true" data-search="tvo studio tour & experience newly renovated public broadcaster studio; first time open">
       <div class="card-top">
         <div class="card-name">TVO Studio Tour &amp; Experience</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -1285,7 +1458,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2180 Yonge St area, Toronto</span></div>
       <div class="card-note">Newly renovated public broadcaster studio; first time open</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Masjid+Toronto+168+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Masjid+Toronto+168+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="masjid toronto behind-the-scenes of active downtown mosque">
       <div class="card-top">
         <div class="card-name">Masjid Toronto</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1293,7 +1466,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">168 Dundas St W, Toronto</span></div>
       <div class="card-note">Behind-the-scenes of active downtown mosque</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=RCLUB+Motoring+Club+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=RCLUB+Motoring+Club+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="rclub motoring club private members club, almost no public profile">
       <div class="card-top">
         <div class="card-name">RCLUB Motoring Club</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1301,7 +1474,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private members club, almost no public profile</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Foy-Smith+House+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Foy-Smith+House+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="foy-smith house private historic residence">
       <div class="card-top">
         <div class="card-name">Foy-Smith House</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1309,7 +1482,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private historic residence</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Osgoode+Hall+130+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Osgoode+Hall+130+Queen+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="osgoode hall iconic law society building; interiors and library rarely open outside formal events">
       <div class="card-top">
         <div class="card-name">Osgoode Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1317,7 +1490,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">130 Queen St W, Toronto</span></div>
       <div class="card-note">Iconic Law Society building; interiors and library rarely open outside formal events</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Hall+%E2%80%94+Arts+%26+Letters+Club+14+Elm+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Hall+%E2%80%94+Arts+%26+Letters+Club+14+Elm+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. george&#39;s hall — arts & letters club private arts club founded 1908, limited public access">
       <div class="card-top">
         <div class="card-name">St. George's Hall — Arts &amp; Letters Club</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1325,7 +1498,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">14 Elm St, Toronto</span></div>
       <div class="card-note">Private arts club founded 1908, limited public access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Regis+College+100+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Regis+College+100+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="regis college jesuit theological college; campus rarely open">
       <div class="card-top">
         <div class="card-name">Regis College</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1333,7 +1506,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">100 Wellesley St W, Toronto</span></div>
       <div class="card-note">Jesuit theological college; campus rarely open</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Thornton-Smith+Building+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Thornton-Smith+Building+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="historic" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="the thornton-smith building heritage commercial building not regularly public">
       <div class="card-top">
         <div class="card-name">The Thornton-Smith Building</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1341,7 +1514,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Heritage commercial building not regularly public</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Guido+Costantino+Projects+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Guido+Costantino+Projects+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="guido costantino projects private art space">
       <div class="card-top">
         <div class="card-name">Guido Costantino Projects</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1349,7 +1522,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private art space</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Raw+Signal+Group+Headquarters+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Raw+Signal+Group+Headquarters+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="office-private" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="raw signal group headquarters private office">
       <div class="card-top">
         <div class="card-name">Raw Signal Group Headquarters</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1357,7 +1530,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private office</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Giaimo+%2F+DIALOG+%2F+Gow+Hastings+%2F+DTAH+%2F+Q4+%2F+Taylor+Hazell+%2F+Turner+Fleischer+Various+downtown+studios" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Giaimo+%2F+DIALOG+%2F+Gow+Hastings+%2F+DTAH+%2F+Q4+%2F+Taylor+Hazell+%2F+Turner+Fleischer+Various+downtown+studios" target="_blank" rel="noopener" data-rarity="rare" data-type="architecture" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="giaimo / dialog / gow hastings / dtah / q4 / taylor hazell / turner fleischer working architecture studios — all private normally">
       <div class="card-top">
         <div class="card-name">Giaimo / DIALOG / Gow Hastings / DTAH / Q4 / Taylor Hazell / Turner Fleischer</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1365,7 +1538,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Various downtown studios</span></div>
       <div class="card-note">Working architecture studios — all private normally</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=El+Mocambo+464+Spadina+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=El+Mocambo+464+Spadina+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="performing-arts" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="el mocambo legendary music venue; backstage / building areas normally restricted">
       <div class="card-top">
         <div class="card-name">El Mocambo</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1373,7 +1546,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">464 Spadina Ave, Toronto</span></div>
       <div class="card-note">Legendary music venue; backstage / building areas normally restricted</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Stella%27s+Place+Assessment+and+Treatment+Centre+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Stella%27s+Place+Assessment+and+Treatment+Centre+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="health-social" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="stella&#39;s place assessment and treatment centre mental health facility, not normally toured">
       <div class="card-top">
         <div class="card-name">Stella's Place Assessment and Treatment Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1381,7 +1554,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Mental health facility, not normally toured</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Nursing+Simulation+Centre+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Nursing+Simulation+Centre+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="educational" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="nursing simulation centre medical training facility">
       <div class="card-top">
         <div class="card-name">Nursing Simulation Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1389,7 +1562,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Medical training facility</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+City+Hall+100+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+City+Hall+100+Queen+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto city hall council chamber, mayor&#39;s office, 27th floor observation deck — restricted floors normally">
       <div class="card-top">
         <div class="card-name">Toronto City Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1397,7 +1570,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">100 Queen St W, Toronto</span></div>
       <div class="card-note">Council Chamber, Mayor's Office, 27th floor observation deck — restricted floors normally</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Legislative+Assembly+of+Ontario+%28Queen%27s+Park%29+111+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Legislative+Assembly+of+Ontario+%28Queen%27s+Park%29+111+Wellesley+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="legislative assembly of ontario (queen&#39;s park) behind-the-scenes access during doors open specifically">
       <div class="card-top">
         <div class="card-name">Legislative Assembly of Ontario (Queen's Park)</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1405,7 +1578,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">111 Wellesley St W, Toronto</span></div>
       <div class="card-note">Behind-the-scenes access during Doors Open specifically</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Ontario+Heritage+Centre+10+Adelaide+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Ontario+Heritage+Centre+10+Adelaide+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="ontario heritage centre government heritage building">
       <div class="card-top">
         <div class="card-name">Ontario Heritage Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1413,7 +1586,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">10 Adelaide St E, Toronto</span></div>
       <div class="card-note">Government heritage building</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TIFF+Lightbox+350+King+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TIFF+Lightbox+350+King+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="tiff lightbox free admission (normally charges)">
       <div class="card-top">
         <div class="card-name">TIFF Lightbox</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1421,7 +1594,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">350 King St W, Toronto</span></div>
       <div class="card-note">Free admission (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Second+City+51+Mercer+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Second+City+51+Mercer+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="performing-arts" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="the second city comedy venue; behind-the-scenes access">
       <div class="card-top">
         <div class="card-name">The Second City</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1429,7 +1602,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">51 Mercer St, Toronto</span></div>
       <div class="card-note">Comedy venue; behind-the-scenes access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+519+519+Church+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+519+519+Church+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="cultural-centre" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="the 519 lgbtq+ community centre, open but special programming">
       <div class="card-top">
         <div class="card-name">The 519</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1437,7 +1610,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">519 Church St, Toronto</span></div>
       <div class="card-note">LGBTQ+ community centre, open but special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TMU+Department+of+Architectural+Science+Toronto+Metropolitan+University" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TMU+Department+of+Architectural+Science+Toronto+Metropolitan+University" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="tmu department of architectural science special programming">
       <div class="card-top">
         <div class="card-name">TMU Department of Architectural Science</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1445,7 +1618,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto Metropolitan University</span></div>
       <div class="card-note">Special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+School+of+Art+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+School+of+Art+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto school of art studio access">
       <div class="card-top">
         <div class="card-name">Toronto School of Art</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1453,7 +1626,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">180 Shaw St, Toronto</span></div>
       <div class="card-note">Studio access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Humane+Society+11+River+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Humane+Society+11+River+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="health-social" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto humane society special tours">
       <div class="card-top">
         <div class="card-name">Toronto Humane Society</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1461,7 +1634,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">11 River St, Toronto</span></div>
       <div class="card-note">Special tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto-Dominion+Centre+66+Wellington+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto-Dominion+Centre+66+Wellington+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="government" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto-dominion centre mies van der rohe architecture, behind-scenes banking hall access">
       <div class="card-top">
         <div class="card-name">Toronto-Dominion Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1469,7 +1642,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">66 Wellington St W, Toronto</span></div>
       <div class="card-note">Mies van der Rohe architecture, behind-scenes banking hall access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Steam+Whistle+Brewing+255+Bremner+Blvd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Steam+Whistle+Brewing+255+Bremner+Blvd%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="industrial" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="steam whistle brewing normally charges for tours">
       <div class="card-top">
         <div class="card-name">Steam Whistle Brewing</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1477,7 +1650,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">255 Bremner Blvd, Toronto</span></div>
       <div class="card-note">Normally charges for tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Campbell+House+Museum+160+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Campbell+House+Museum+160+Queen+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="museum" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="campbell house museum free (normally charges); oldest surviving building from town of york">
       <div class="card-top">
         <div class="card-name">Campbell House Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1485,7 +1658,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">160 Queen St W, Toronto</span></div>
       <div class="card-note">Free (normally charges); oldest surviving building from Town of York</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Holy+Trinity+19+Trinity+Square%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Holy+Trinity+19+Trinity+Square%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="church of the holy trinity open, special programming">
       <div class="card-top">
         <div class="card-name">Church of the Holy Trinity</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1493,7 +1666,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">19 Trinity Square, Toronto</span></div>
       <div class="card-note">Open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Metropolitan+United+Church+56+Queen+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Metropolitan+United+Church+56+Queen+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="metropolitan united church open, special access to architectural details">
       <div class="card-top">
         <div class="card-name">Metropolitan United Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1501,7 +1674,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">56 Queen St E, Toronto</span></div>
       <div class="card-note">Open, special access to architectural details</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James+Cathedral+65+Church+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James+Cathedral+65+Church+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. james cathedral open, guided tours">
       <div class="card-top">
         <div class="card-name">St. James Cathedral</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1509,7 +1682,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">65 Church St, Toronto</span></div>
       <div class="card-note">Open, guided tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Hall+157+King+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Hall+157+King+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. lawrence hall open, special guided access">
       <div class="card-top">
         <div class="card-name">St. Lawrence Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1517,7 +1690,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">157 King St E, Toronto</span></div>
       <div class="card-note">Open, special guided access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Market+North+Building+92+Front+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Lawrence+Market+North+Building+92+Front+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="historic" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. lawrence market north building open, heritage access">
       <div class="card-top">
         <div class="card-name">St. Lawrence Market North Building</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1525,7 +1698,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">92 Front St E, Toronto</span></div>
       <div class="card-note">Open, heritage access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Andrew%27s+Presbyterian+Church+73+Simcoe+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Andrew%27s+Presbyterian+Church+73+Simcoe+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. andrew&#39;s presbyterian church open, special programming">
       <div class="card-top">
         <div class="card-name">St. Andrew's Presbyterian Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1533,7 +1706,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">73 Simcoe St, Toronto</span></div>
       <div class="card-note">Open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Greek+Orthodox+Church+115+Bond+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Greek+Orthodox+Church+115+Bond+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="st. george&#39;s greek orthodox church open, special programming">
       <div class="card-top">
         <div class="card-name">St. George's Greek Orthodox Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1541,7 +1714,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">115 Bond St, Toronto</span></div>
       <div class="card-note">Open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Jarvis+Street+Baptist+Church+130+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Jarvis+Street+Baptist+Church+130+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="jarvis street baptist church open, tours">
       <div class="card-top">
         <div class="card-name">Jarvis Street Baptist Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1549,7 +1722,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">130 Gerrard St E, Toronto</span></div>
       <div class="card-note">Open, tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Camera+Club+587+Mt+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Camera+Club+587+Mt+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="arts-creative" data-neighborhood="downtown" data-plans="plan1 plan2" data-search="toronto camera club open house">
       <div class="card-top">
         <div class="card-name">Toronto Camera Club</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1560,7 +1733,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="oldtown">
   <div class="section-header">
     <span class="section-day">OLD TOWN</span>
     <h2 class="section-title">Old Town / Port Lands / East Downtown</h2>
@@ -1568,7 +1741,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-oldtown"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=25+Ookwemin+Street+281+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=25+Ookwemin+Street+281+Cherry+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="government" data-neighborhood="None" data-plans="" data-search="25 ookwemin street former toronto hydro station; rare behind-scenes of port lands transformation, ontario heritage trust protected">
       <div class="card-top">
         <div class="card-name">25 Ookwemin Street</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1576,7 +1749,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">281 Cherry St, Toronto</span></div>
       <div class="card-note">Former Toronto Hydro Station; rare behind-scenes of Port Lands transformation, Ontario Heritage Trust protected</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Anishnawbe+Health+Toronto+425+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Anishnawbe+Health+Toronto+425+Cherry+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="health-social" data-neighborhood="None" data-plans="" data-new="true" data-search="anishnawbe health toronto new purpose-built indigenous health facility, not normally toured">
       <div class="card-top">
         <div class="card-name">Anishnawbe Health Toronto</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -1584,7 +1757,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">425 Cherry St, Toronto</span></div>
       <div class="card-note">New purpose-built Indigenous health facility, not normally toured</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Carpet+Factory+67+Mowat+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Carpet+Factory+67+Mowat+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="industrial" data-neighborhood="None" data-plans="" data-search="toronto carpet factory industrial heritage building not normally open">
       <div class="card-top">
         <div class="card-name">Toronto Carpet Factory</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1592,7 +1765,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">67 Mowat Ave, Toronto</span></div>
       <div class="card-note">Industrial heritage building not normally open</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=433+Eastern+Yard+433+Eastern+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=433+Eastern+Yard+433+Eastern+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="industrial" data-neighborhood="None" data-plans="" data-search="433 eastern yard consumers gas 1912; city transportation division yard, rare access to service vehicles + salt storage">
       <div class="card-top">
         <div class="card-name">433 Eastern Yard</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1600,7 +1773,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">433 Eastern Ave, Toronto</span></div>
       <div class="card-note">Consumers Gas 1912; City Transportation Division yard, rare access to service vehicles + salt storage</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=401+Richmond+Ltd.+401+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=401+Richmond+Ltd.+401+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="401 richmond ltd. arts hub, special access to artists&#39; studios (sat only)">
       <div class="card-top">
         <div class="card-name">401 Richmond Ltd.</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span><span class="badge badge-sun">Sat only</span></div>
@@ -1608,7 +1781,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">401 Richmond St W, Toronto</span></div>
       <div class="card-note">Arts hub, special access to artists' studios (Sat only)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=City+of+Toronto+Archives+255+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=City+of+Toronto+Archives+255+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="city of toronto archives free admission (normally charges / appointment)">
       <div class="card-top">
         <div class="card-name">City of Toronto Archives</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1616,7 +1789,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">255 Spadina Rd, Toronto</span></div>
       <div class="card-note">Free admission (normally charges / appointment)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Mackenzie+House+82+Bond+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Mackenzie+House+82+Bond+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="historic" data-neighborhood="None" data-plans="" data-search="mackenzie house normally charges; free during doors open">
       <div class="card-top">
         <div class="card-name">Mackenzie House</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1624,7 +1797,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">82 Bond St, Toronto</span></div>
       <div class="card-note">Normally charges; free during Doors Open</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Market+Gallery+95+Front+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Market+Gallery+95+Front+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="the market gallery normally charges; free">
       <div class="card-top">
         <div class="card-name">The Market Gallery</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1632,7 +1805,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">95 Front St E, Toronto</span></div>
       <div class="card-note">Normally charges; free</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scadding+Cabin+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scadding+Cabin+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="park-outdoor" data-neighborhood="None" data-plans="" data-search="scadding cabin open, pioneer cabin programming">
       <div class="card-top">
         <div class="card-name">Scadding Cabin</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1640,7 +1813,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Exhibition Place, Toronto</span></div>
       <div class="card-note">Open, pioneer cabin programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James%27+Cemetery+%26+Chapel+of+St.+James-the-Less+NHS+635+Parliament+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+James%27+Cemetery+%26+Chapel+of+St.+James-the-Less+NHS+635+Parliament+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="historic" data-neighborhood="None" data-plans="" data-search="st. james&#39; cemetery & chapel of st. james-the-less nhs cemetery open but special heritage tours">
       <div class="card-top">
         <div class="card-name">St. James' Cemetery &amp; Chapel of St. James-the-Less NHS</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1651,7 +1824,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="waterfront">
   <div class="section-header">
     <span class="section-day">WATERFRONT</span>
     <h2 class="section-title">Waterfront / Harbourfront / Toronto Islands</h2>
@@ -1659,7 +1832,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-waterfront"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Redpath+Sugar+95+Queens+Quay+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Redpath+Sugar+95+Queens+Quay+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="industrial" data-neighborhood="None" data-plans="" data-search="redpath sugar industrial sugar refinery, working factory access">
       <div class="card-top">
         <div class="card-name">Redpath Sugar</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1667,7 +1840,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">95 Queens Quay E, Toronto</span></div>
       <div class="card-note">Industrial sugar refinery, working factory access</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fort+Rouill%C3%A9+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fort+Rouill%C3%A9+Exhibition+Place%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="park-outdoor" data-neighborhood="None" data-plans="" data-search="fort rouillé archaeological site, rarely accessible">
       <div class="card-top">
         <div class="card-name">Fort Rouillé</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1675,7 +1848,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Exhibition Place, Toronto</span></div>
       <div class="card-note">Archaeological site, rarely accessible</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibraltar+Point+Centre+for+the+Arts+443+Lakeshore+Ave%2C+Toronto+Island" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibraltar+Point+Centre+for+the+Arts+443+Lakeshore+Ave%2C+Toronto+Island" target="_blank" rel="noopener" data-rarity="rare" data-type="park-outdoor" data-neighborhood="None" data-plans="" data-search="gibraltar point centre for the arts limited public access; requires ferry">
       <div class="card-top">
         <div class="card-name">Gibraltar Point Centre for the Arts</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1683,7 +1856,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">443 Lakeshore Ave, Toronto Island</span></div>
       <div class="card-note">Limited public access; requires ferry</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Billy+Bishop+Toronto+City+Airport+2+Eireann+Quay%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Billy+Bishop+Toronto+City+Airport+2+Eireann+Quay%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="industrial" data-neighborhood="None" data-plans="" data-search="billy bishop toronto city airport underwater pedestrian tunnel, electric ferry, safety vehicles (sat only)">
       <div class="card-top">
         <div class="card-name">Billy Bishop Toronto City Airport</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sat only</span></div>
@@ -1691,7 +1864,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2 Eireann Quay, Toronto</span></div>
       <div class="card-note">Underwater pedestrian tunnel, electric ferry, safety vehicles (Sat only)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TRCA+Head+Office+101+Exchange+Ave%2C+Vaughan" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=TRCA+Head+Office+101+Exchange+Ave%2C+Vaughan" target="_blank" rel="noopener" data-rarity="special-programming" data-type="government" data-neighborhood="None" data-plans="" data-search="trca head office toronto and region conservation authority">
       <div class="card-top">
         <div class="card-name">TRCA Head Office</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1699,7 +1872,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">101 Exchange Ave, Vaughan</span></div>
       <div class="card-note">Toronto and Region Conservation Authority</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Waterworks+Food+Hall+505+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Waterworks+Food+Hall+505+Richmond+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="industrial" data-neighborhood="None" data-plans="" data-search="waterworks food hall normally open, special programming">
       <div class="card-top">
         <div class="card-name">Waterworks Food Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1710,7 +1883,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="distillery">
   <div class="section-header">
     <span class="section-day">DISTILLERY</span>
     <h2 class="section-title">Distillery District</h2>
@@ -1718,7 +1891,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-distillery"></div>
   <div class="grid">
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Spectrum+585+Dundas+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Spectrum+585+Dundas+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="daniels spectrum community arts hub, special programming">
       <div class="card-top">
         <div class="card-name">Daniels Spectrum</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1729,7 +1902,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="west">
   <div class="section-header">
     <span class="section-day">WEST</span>
     <h2 class="section-title">West Toronto</h2>
@@ -1737,7 +1910,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-west"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Netflix+Toronto+Office+486+Front+St+W+%28The+Well%29%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Netflix+Toronto+Office+486+Front+St+W+%28The+Well%29%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="office-private" data-neighborhood="None" data-plans="" data-new="true" data-search="netflix toronto office first-ever public opening — canada&#39;s first netflix office">
       <div class="card-top">
         <div class="card-name">Netflix Toronto Office</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -1745,7 +1918,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">486 Front St W (The Well), Toronto</span></div>
       <div class="card-note">First-ever public opening — Canada's first Netflix office</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Polish+Combatants%27+Association+Branch+20+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Polish+Combatants%27+Association+Branch+20+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="cultural-centre" data-neighborhood="None" data-plans="" data-search="polish combatants&#39; association branch 20 private veterans / cultural organization">
       <div class="card-top">
         <div class="card-name">Polish Combatants' Association Branch 20</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1753,7 +1926,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private veterans / cultural organization</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hacklab.TO+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hacklab.TO+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="hacklab.to private hackerspace">
       <div class="card-top">
         <div class="card-name">Hacklab.TO</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1761,7 +1934,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private hackerspace</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Dine+Alone+Records+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Dine+Alone+Records+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="dine alone records private record label office">
       <div class="card-top">
         <div class="card-name">Dine Alone Records</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1769,7 +1942,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private record label office</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fool%27s+Paradise+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Fool%27s+Paradise+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="fool&#39;s paradise private creative space">
       <div class="card-top">
         <div class="card-name">Fool's Paradise</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1777,7 +1950,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private creative space</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Corleck+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Corleck+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="None" data-plans="" data-search="the corleck private heritage building">
       <div class="card-top">
         <div class="card-name">The Corleck</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1785,7 +1958,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private heritage building</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Junction+Craft+Brewery+%28Symes+Road+Destructor%29+150+Symes+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Junction+Craft+Brewery+%28Symes+Road+Destructor%29+150+Symes+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="industrial" data-neighborhood="None" data-plans="" data-search="junction craft brewery (symes road destructor) rare access to historic destructor / incinerator building">
       <div class="card-top">
         <div class="card-name">Junction Craft Brewery (Symes Road Destructor)</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1793,7 +1966,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">150 Symes Rd, Toronto</span></div>
       <div class="card-note">Rare access to historic destructor / incinerator building</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=All+Ours+Studios+62+Geary+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=All+Ours+Studios+62+Geary+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="other" data-neighborhood="None" data-plans="" data-search="all ours studios converted warehouse + shipping containers artist studios">
       <div class="card-top">
         <div class="card-name">All Ours Studios</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1801,7 +1974,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">62 Geary Ave, Toronto</span></div>
       <div class="card-note">Converted warehouse + shipping containers artist studios</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Charles+Street+Video+76+Geary+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Charles+Street+Video+76+Geary+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="charles street video non-profit media arts org; equipment demos">
       <div class="card-top">
         <div class="card-name">Charles Street Video</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1809,7 +1982,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">76 Geary Ave, Toronto</span></div>
       <div class="card-note">Non-profit media arts org; equipment demos</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+213+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+213+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="government" data-neighborhood="None" data-plans="" data-search="fire station 213 fire hall access">
       <div class="card-top">
         <div class="card-name">Fire Station 213</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1817,7 +1990,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Fire hall access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Bakery+at+2+Fraser+Ave+2+Fraser+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Bakery+at+2+Fraser+Ave+2+Fraser+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="the bakery at 2 fraser ave creative / events space not normally public">
       <div class="card-top">
         <div class="card-name">The Bakery at 2 Fraser Ave</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1825,7 +1998,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2 Fraser Ave, Toronto</span></div>
       <div class="card-note">Creative / events space not normally public</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=UrbanArts+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=UrbanArts+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="urbanarts arts org, limited public profile">
       <div class="card-top">
         <div class="card-name">UrbanArts</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1833,7 +2006,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Arts org, limited public profile</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=West+Toronto+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=West+Toronto+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="sports-recreation" data-neighborhood="None" data-plans="" data-search="west toronto lawn bowling club private club">
       <div class="card-top">
         <div class="card-name">West Toronto Lawn Bowling Club</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1841,7 +2014,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private club</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Parkdale+Arts+and+Culture+Centre+Parkdale%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Parkdale+Arts+and+Culture+Centre+Parkdale%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="parkdale arts and culture centre special access">
       <div class="card-top">
         <div class="card-name">Parkdale Arts and Culture Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1849,7 +2022,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Parkdale, Toronto</span></div>
       <div class="card-note">Special access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lula+Lounge+1585+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lula+Lounge+1585+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="performing-arts" data-neighborhood="None" data-plans="" data-search="lula lounge music venue, behind-scenes">
       <div class="card-top">
         <div class="card-name">Lula Lounge</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -1857,7 +2030,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1585 Dundas St W, Toronto</span></div>
       <div class="card-note">Music venue, behind-scenes</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Contemporary+Art+Toronto+%28MOCA%29+158+Sterling+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Contemporary+Art+Toronto+%28MOCA%29+158+Sterling+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="museum of contemporary art toronto (moca) free admission (normally charges)">
       <div class="card-top">
         <div class="card-name">Museum of Contemporary Art Toronto (MOCA)</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1865,7 +2038,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">158 Sterling Rd, Toronto</span></div>
       <div class="card-note">Free admission (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Theatre+Passe+Muraille+16+Ryerson+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Theatre+Passe+Muraille+16+Ryerson+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="performing-arts" data-neighborhood="None" data-plans="" data-search="theatre passe muraille theatre behind-the-scenes">
       <div class="card-top">
         <div class="card-name">Theatre Passe Muraille</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1873,7 +2046,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">16 Ryerson Ave, Toronto</span></div>
       <div class="card-note">Theatre behind-the-scenes</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=STACKT+market+28+Bathurst+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=STACKT+market+28+Bathurst+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="cultural-centre" data-neighborhood="None" data-plans="" data-search="stackt market normally open, special programming">
       <div class="card-top">
         <div class="card-name">STACKT market</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1881,7 +2054,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">28 Bathurst St, Toronto</span></div>
       <div class="card-note">Normally open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Youngplace+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Youngplace+180+Shaw+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="youngplace community arts centre">
       <div class="card-top">
         <div class="card-name">Youngplace</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -1889,7 +2062,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">180 Shaw St, Toronto</span></div>
       <div class="card-note">Community arts centre</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Assembly+Hall+1+Colonel+Samuel+Smith+Park+Dr%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Assembly+Hall+1+Colonel+Samuel+Smith+Park+Dr%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="health-social" data-neighborhood="None" data-plans="" data-search="assembly hall 1898 lakeshore psychiatric hospital building">
       <div class="card-top">
         <div class="card-name">Assembly Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1897,7 +2070,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1 Colonel Samuel Smith Park Dr, Toronto</span></div>
       <div class="card-note">1898 Lakeshore Psychiatric Hospital building</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Addiction+and+Mental+Health+%28CAMH%29+1001+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Addiction+and+Mental+Health+%28CAMH%29+1001+Queen+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="educational" data-neighborhood="None" data-plans="" data-search="centre for addiction and mental health (camh) campus tours">
       <div class="card-top">
         <div class="card-name">Centre for Addiction and Mental Health (CAMH)</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1905,7 +2078,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1001 Queen St W, Toronto</span></div>
       <div class="card-note">Campus tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Wychwood+Barns+601+Christie+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Wychwood+Barns+601+Christie+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="wychwood barns normally accessible, special programming">
       <div class="card-top">
         <div class="card-name">Wychwood Barns</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1913,7 +2086,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">601 Christie St, Toronto</span></div>
       <div class="card-note">Normally accessible, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Young+Centre+for+the+Performing+Arts+50+Tank+House+Ln%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Young+Centre+for+the+Performing+Arts+50+Tank+House+Ln%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="performing-arts" data-neighborhood="None" data-plans="" data-search="young centre for the performing arts normally accessible, behind-scenes">
       <div class="card-top">
         <div class="card-name">Young Centre for the Performing Arts</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -1924,7 +2097,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="midtown">
   <div class="section-header">
     <span class="section-day">MIDTOWN</span>
     <h2 class="section-title">Midtown / Yorkville / Annex / U of T</h2>
@@ -1945,7 +2118,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="cinema-pairing">Yorkville/Annex cluster within 15-min walk: Heliconian Hall 🔴, Women's Art Association 🔴, Bata 🟡, KPMB 🟠, Goethe / Alliance 🟠, U of T Physics deck 🟡, Hot Docs 🟡. Note: no afternoon showings between 11:30 AM and 5:10 PM.</div>
       <div class="recommend">→ Top pick overall: 5:10 PM covers all of Doors Open with zero compromise</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ismaili+Centre%2C+Toronto+49+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ismaili+Centre%2C+Toronto+49+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="None" data-plans="" data-new="true" data-search="ismaili centre, toronto fumihiko maki-designed prayer hall — rarely open to non-community members">
       <div class="card-top">
         <div class="card-name">Ismaili Centre, Toronto</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -1953,7 +2126,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">49 Wynford Dr, Toronto</span></div>
       <div class="card-note">Fumihiko Maki-designed prayer hall — rarely open to non-community members</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Heliconian+Hall+35+Hazelton+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Heliconian+Hall+35+Hazelton+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="arts-creative" data-neighborhood="None" data-plans="" data-search="heliconian hall private women&#39;s arts club, 1875 building">
       <div class="card-top">
         <div class="card-name">Heliconian Hall</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1961,7 +2134,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">35 Hazelton Ave, Toronto</span></div>
       <div class="card-note">Private women's arts club, 1875 building</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Women%27s+Art+Association+of+Canada+23+Prince+Arthur+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Women%27s+Art+Association+of+Canada+23+Prince+Arthur+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="None" data-plans="" data-search="women&#39;s art association of canada private heritage club">
       <div class="card-top">
         <div class="card-name">Women's Art Association of Canada</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1969,7 +2142,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">23 Prince Arthur Ave, Toronto</span></div>
       <div class="card-note">Private heritage club</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=InterAccess+Media+Art+Centre+950+Dupont+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=InterAccess+Media+Art+Centre+950+Dupont+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="None" data-plans="" data-search="interaccess media art centre private media arts org">
       <div class="card-top">
         <div class="card-name">InterAccess Media Art Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1977,7 +2150,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">950 Dupont St, Toronto</span></div>
       <div class="card-note">Private media arts org</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+Fire+Hall+30+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+Fire+Hall+30+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="government" data-neighborhood="None" data-plans="" data-search="old fire hall 30 decommissioned heritage fire hall">
       <div class="card-top">
         <div class="card-name">Old Fire Hall 30</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1985,7 +2158,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Decommissioned heritage fire hall</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Xpace+Cultural+Centre+2-303+Lansdowne+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Xpace+Cultural+Centre+2-303+Lansdowne+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="cultural-centre" data-neighborhood="None" data-plans="" data-search="xpace cultural centre artist-run centre, limited public hours">
       <div class="card-top">
         <div class="card-name">Xpace Cultural Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -1993,7 +2166,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2-303 Lansdowne Ave, Toronto</span></div>
       <div class="card-note">Artist-run centre, limited public hours</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Joan+and+Martin+Goldfarb+Gallery+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=The+Joan+and+Martin+Goldfarb+Gallery+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="None" data-plans="" data-search="the joan and martin goldfarb gallery private gallery">
       <div class="card-top">
         <div class="card-name">The Joan and Martin Goldfarb Gallery</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2001,7 +2174,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private gallery</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=KPMB+Architects+351+King+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=KPMB+Architects+351+King+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="architecture" data-neighborhood="None" data-plans="" data-search="kpmb architects working architecture studio">
       <div class="card-top">
         <div class="card-name">KPMB Architects</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2009,7 +2182,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">351 King St E, Toronto</span></div>
       <div class="card-note">Working architecture studio</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Alliance+Fran%C3%A7aise+Toronto+24+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Alliance+Fran%C3%A7aise+Toronto+24+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="educational" data-neighborhood="None" data-plans="" data-search="alliance française toronto heritage building, language school (sat only)">
       <div class="card-top">
         <div class="card-name">Alliance Française Toronto</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span><span class="badge badge-sun">Sat only</span></div>
@@ -2017,7 +2190,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">24 Spadina Rd, Toronto</span></div>
       <div class="card-note">Heritage building, language school (Sat only)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+315+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+315+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="government" data-neighborhood="None" data-plans="" data-search="fire station 315 fire hall access">
       <div class="card-top">
         <div class="card-name">Fire Station 315</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2025,7 +2198,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Fire hall access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=First+Narayever+Congregation+187+Brunswick+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=First+Narayever+Congregation+187+Brunswick+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="first narayever congregation heritage synagogue (1923), limited public access normally">
       <div class="card-top">
         <div class="card-name">First Narayever Congregation</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2033,7 +2206,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">187 Brunswick Ave, Toronto</span></div>
       <div class="card-note">Heritage synagogue (1923), limited public access normally</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Goethe-Institut+Toronto+100+University+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Goethe-Institut+Toronto+100+University+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="educational" data-neighborhood="None" data-plans="" data-search="goethe-institut toronto german cultural institute">
       <div class="card-top">
         <div class="card-name">Goethe-Institut Toronto</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2041,7 +2214,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">100 University Ave, Toronto</span></div>
       <div class="card-note">German cultural institute</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Manor+Road+United+Church+240+Manor+Rd+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Manor+Road+United+Church+240+Manor+Rd+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="manor road united church heritage church">
       <div class="card-top">
         <div class="card-name">Manor Road United Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2049,7 +2222,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">240 Manor Rd E, Toronto</span></div>
       <div class="card-note">Heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Rosedale+United+Church+159+Roxborough+Dr%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Rosedale+United+Church+159+Roxborough+Dr%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="rosedale united church heritage church, normally limited access">
       <div class="card-top">
         <div class="card-name">Rosedale United Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2057,7 +2230,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">159 Roxborough Dr, Toronto</span></div>
       <div class="card-note">Heritage church, normally limited access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Thomas%27s+Anglican+Church+383+Huron+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Thomas%27s+Anglican+Church+383+Huron+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="st. thomas&#39;s anglican church heritage church tours">
       <div class="card-top">
         <div class="card-name">St. Thomas's Anglican Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2065,7 +2238,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">383 Huron St, Toronto</span></div>
       <div class="card-note">Heritage church tours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Hot+Docs+Ted+Rogers+Cinema+506+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Hot+Docs+Ted+Rogers+Cinema+506+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="performing-arts" data-neighborhood="None" data-plans="" data-search="hot docs ted rogers cinema free programming (normally charges)">
       <div class="card-top">
         <div class="card-name">Hot Docs Ted Rogers Cinema</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2073,7 +2246,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">506 Bloor St W, Toronto</span></div>
       <div class="card-note">Free programming (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Bata+Shoe+Museum+327+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Bata+Shoe+Museum+327+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="bata shoe museum free admission (normally charges)">
       <div class="card-top">
         <div class="card-name">Bata Shoe Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2081,7 +2254,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">327 Bloor St W, Toronto</span></div>
       <div class="card-note">Free admission (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Akin+Davisville+224+Merton+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Akin+Davisville+224+Merton+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="other" data-neighborhood="None" data-plans="" data-search="akin davisville artists&#39; studios (sat only)">
       <div class="card-top">
         <div class="card-name">Akin Davisville</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sat only</span></div>
@@ -2089,7 +2262,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">224 Merton St, Toronto</span></div>
       <div class="card-note">Artists' studios (Sat only)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Spadina+Museum+285+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Spadina+Museum+285+Spadina+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="spadina museum free (normally charges); historic house museum">
       <div class="card-top">
         <div class="card-name">Spadina Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2097,7 +2270,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">285 Spadina Rd, Toronto</span></div>
       <div class="card-note">Free (normally charges); historic house museum</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Textile+Museum+of+Canada+55+Centre+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Textile+Museum+of+Canada+55+Centre+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="textile museum of canada free (normally charges)">
       <div class="card-top">
         <div class="card-name">Textile Museum of Canada</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2105,7 +2278,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">55 Centre Ave, Toronto</span></div>
       <div class="card-note">Free (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=University+of+Toronto+Bookstore+214+College+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=University+of+Toronto+Bookstore+214+College+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="None" data-plans="" data-search="university of toronto bookstore special behind-scenes access">
       <div class="card-top">
         <div class="card-name">University of Toronto Bookstore</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2113,7 +2286,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">214 College St, Toronto</span></div>
       <div class="card-note">Special behind-scenes access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=U+of+T+Department+of+Physics+60+St+George+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=U+of+T+Department+of+Physics+60+St+George+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="None" data-plans="" data-search="u of t department of physics 15th floor observation deck access">
       <div class="card-top">
         <div class="card-name">U of T Department of Physics</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2121,7 +2294,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">60 St George St, Toronto</span></div>
       <div class="card-note">15th floor observation deck access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Paul%27s+Bloor+Street+227+Bloor+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Paul%27s+Bloor+Street+227+Bloor+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="None" data-plans="" data-search="st. paul&#39;s bloor street open, special programming">
       <div class="card-top">
         <div class="card-name">St. Paul's Bloor Street</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2129,7 +2302,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">227 Bloor St E, Toronto</span></div>
       <div class="card-note">Open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Trinity-St.+Paul%27s+United+Church+427+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Trinity-St.+Paul%27s+United+Church+427+Bloor+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="None" data-plans="" data-search="trinity-st. paul&#39;s united church open, special programming">
       <div class="card-top">
         <div class="card-name">Trinity-St. Paul's United Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2137,7 +2310,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">427 Bloor St W, Toronto</span></div>
       <div class="card-note">Open, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Estonian+Museum+Canada+958+Broadview+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Estonian+Museum+Canada+958+Broadview+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="museum" data-neighborhood="None" data-plans="" data-search="estonian museum canada open, special exhibits">
       <div class="card-top">
         <div class="card-name">Estonian Museum Canada</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2145,7 +2318,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">958 Broadview Ave, Toronto</span></div>
       <div class="card-note">Open, special exhibits</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Building+%28U+of+T%29+1+Spadina+Cres%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Building+%28U+of+T%29+1+Spadina+Cres%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="educational" data-neighborhood="None" data-plans="" data-search="daniels building (u of t) open, new eco-timber building">
       <div class="card-top">
         <div class="card-name">Daniels Building (U of T)</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2153,7 +2326,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1 Spadina Cres, Toronto</span></div>
       <div class="card-note">Open, new eco-timber building</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Blessed+Sacrament+Catholic+Church+24+Cheritan+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Blessed+Sacrament+Catholic+Church+24+Cheritan+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="None" data-plans="" data-new="true" data-search="blessed sacrament catholic church 100th anniversary programming">
       <div class="card-top">
         <div class="card-name">Blessed Sacrament Catholic Church</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-new">★ NEW</span></div>
@@ -2164,7 +2337,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="northyork">
   <div class="section-header">
     <span class="section-day">NORTH YORK</span>
     <h2 class="section-title">North York / Uptown / North Toronto</h2>
@@ -2211,7 +2384,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="cinema-pairing">Pairs with the most architecturally singular cluster in Toronto: Aga Khan Museum 🟡 + Ismaili Centre ★🔴 (Fumihiko Maki prayer hall) + Japanese Canadian Cultural Centre 🟠 — all within 1 km of each other and the cinema.</div>
       <div class="recommend">→ Strong pick: 3:00 PM — Wynford Drive cluster done by 1pm</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Sringeri+Vidya+Bharati+Foundation+Canada+2180+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Sringeri+Vidya+Bharati+Foundation+Canada+2180+Yonge+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="None" data-plans="" data-new="true" data-search="sringeri vidya bharati foundation canada 9th-century chola-style hindu temple, 25 marble murals; guided tours + bharatanatyam performances">
       <div class="card-top">
         <div class="card-name">Sringeri Vidya Bharati Foundation Canada</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -2219,7 +2392,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2180 Yonge St, Toronto</span></div>
       <div class="card-note">9th-century Chola-style Hindu temple, 25 marble murals; guided tours + Bharatanatyam performances</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Archives+of+Ontario+134+Ian+Macdonald+Blvd%2C+York+University%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Archives+of+Ontario+134+Ian+Macdonald+Blvd%2C+York+University%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="None" data-plans="" data-new="true" data-search="archives of ontario largest provincial archives in canada; conservation labs, digitization studios (normally appointment-only, sat only)">
       <div class="card-top">
         <div class="card-name">Archives of Ontario</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span><span class="badge badge-sun">Sat only</span></div>
@@ -2227,7 +2400,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">134 Ian Macdonald Blvd, York University, Toronto</span></div>
       <div class="card-note">Largest provincial archives in Canada; conservation labs, digitization studios (normally appointment-only, Sat only)</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=HOK+Toronto+Design+Studio+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=HOK+Toronto+Design+Studio+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="architecture" data-neighborhood="None" data-plans="" data-search="hok toronto design studio global architecture firm, private office">
       <div class="card-top">
         <div class="card-name">HOK Toronto Design Studio</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2235,7 +2408,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Global architecture firm, private office</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Justice+Leadership%2C+Humber+Polytechnic+3120+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Justice+Leadership%2C+Humber+Polytechnic+3120+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="educational" data-neighborhood="None" data-plans="" data-new="true" data-search="centre for justice leadership, humber polytechnic mock courtroom, forensics lab, crime-scene lab (sat only)">
       <div class="card-top">
         <div class="card-name">Centre for Justice Leadership, Humber Polytechnic</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span><span class="badge badge-sun">Sat only</span></div>
@@ -2243,7 +2416,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">3120 Lake Shore Blvd W, Toronto</span></div>
       <div class="card-note">Mock courtroom, forensics lab, crime-scene lab (Sat only)</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Kadampa+Buddhist+Temple+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Kadampa+Buddhist+Temple+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="None" data-plans="" data-search="kadampa buddhist temple normally limited public access">
       <div class="card-top">
         <div class="card-name">Kadampa Buddhist Temple</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2251,7 +2424,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Normally limited public access</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Water+Operations+Finch+Yard+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Toronto+Water+Operations+Finch+Yard+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="performing-arts" data-neighborhood="None" data-plans="" data-search="toronto water operations finch yard infrastructure facility, not normally open">
       <div class="card-top">
         <div class="card-name">Toronto Water Operations Finch Yard</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2259,7 +2432,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Infrastructure facility, not normally open</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Japanese+Canadian+Cultural+Centre+6+Garamond+Ct%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Japanese+Canadian+Cultural+Centre+6+Garamond+Ct%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="japanese canadian cultural centre special heritage access; adjacent to aga khan cluster">
       <div class="card-top">
         <div class="card-name">Japanese Canadian Cultural Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2267,7 +2440,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">6 Garamond Ct, Toronto</span></div>
       <div class="card-note">Special heritage access; adjacent to Aga Khan cluster</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Franklin+Carmichael+Art+Centre+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Franklin+Carmichael+Art+Centre+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="museum" data-neighborhood="None" data-plans="" data-search="franklin carmichael art centre group of seven connection, limited public hours">
       <div class="card-top">
         <div class="card-name">Franklin Carmichael Art Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2275,7 +2448,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Group of Seven connection, limited public hours</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Historic+Zion+Schoolhouse+1091+Finch+Ave+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Historic+Zion+Schoolhouse+1091+Finch+Ave+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="educational" data-neighborhood="None" data-plans="" data-search="historic zion schoolhouse 19th century schoolhouse">
       <div class="card-top">
         <div class="card-name">Historic Zion Schoolhouse</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2283,7 +2456,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1091 Finch Ave E, Toronto</span></div>
       <div class="card-note">19th century schoolhouse</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Aga+Khan+Museum+77+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Aga+Khan+Museum+77+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="religious" data-neighborhood="None" data-plans="" data-search="aga khan museum free admission (normally charges); fumihiko maki; adjacent park + performances">
       <div class="card-top">
         <div class="card-name">Aga Khan Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2291,7 +2464,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">77 Wynford Dr, Toronto</span></div>
       <div class="card-note">Free admission (normally charges); Fumihiko Maki; adjacent park + performances</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibson+House+Museum+5172+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Gibson+House+Museum+5172+Yonge+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="gibson house museum free (normally charges)">
       <div class="card-top">
         <div class="card-name">Gibson House Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2299,7 +2472,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">5172 Yonge St, Toronto</span></div>
       <div class="card-note">Free (normally charges)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Village+at+Black+Creek+1000+Murray+Ross+Pkwy%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=The+Village+at+Black+Creek+1000+Murray+Ross+Pkwy%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="museum" data-neighborhood="None" data-plans="" data-search="the village at black creek free (normally charges); living history museum">
       <div class="card-top">
         <div class="card-name">The Village at Black Creek</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2310,7 +2483,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="east">
   <div class="section-header">
     <span class="section-day">EAST</span>
     <h2 class="section-title">East Toronto</h2>
@@ -2318,7 +2491,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-east"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Historic+Don+Jail+at+Hennick+Bridgepoint+Hospital+550+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Historic+Don+Jail+at+Hennick+Bridgepoint+Hospital+550+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="health-social" data-neighborhood="None" data-plans="" data-search="historic don jail at hennick bridgepoint hospital site of canada&#39;s last legal execution; gallows + medical history access">
       <div class="card-top">
         <div class="card-name">Historic Don Jail at Hennick Bridgepoint Hospital</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2326,7 +2499,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">550 Gerrard St E, Toronto</span></div>
       <div class="card-note">Site of Canada's last legal execution; gallows + medical history access</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=R.C.+Harris+Water+Treatment+Plant+2701+Queen+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=R.C.+Harris+Water+Treatment+Plant+2701+Queen+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="industrial" data-neighborhood="None" data-plans="" data-search="r.c. harris water treatment plant art deco masterpiece; interior almost never open">
       <div class="card-top">
         <div class="card-name">R.C. Harris Water Treatment Plant</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2334,7 +2507,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2701 Queen St E, Toronto</span></div>
       <div class="card-note">Art Deco masterpiece; interior almost never open</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=First+Russian+Congregation+of+Rodfesolium+Ansekiev+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=First+Russian+Congregation+of+Rodfesolium+Ansekiev+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="historic" data-neighborhood="None" data-plans="" data-search="first russian congregation of rodfesolium ansekiev private heritage congregation">
       <div class="card-top">
         <div class="card-name">First Russian Congregation of Rodfesolium Ansekiev</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2342,7 +2515,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private heritage congregation</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Legion+Experience+Museum+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Legion+Experience+Museum+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="None" data-plans="" data-search="legion experience museum private veterans museum">
       <div class="card-top">
         <div class="card-name">Legion Experience Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2350,7 +2523,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private veterans museum</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Haven+at+the+Crossroads+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Haven+at+the+Crossroads+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="health-social" data-neighborhood="None" data-plans="" data-search="street haven at the crossroads women&#39;s shelter, not normally toured">
       <div class="card-top">
         <div class="card-name">Street Haven at the Crossroads</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2358,7 +2531,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Women's shelter, not normally toured</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Health+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Street+Health+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="health-social" data-neighborhood="None" data-plans="" data-search="street health community health org, not normally toured">
       <div class="card-top">
         <div class="card-name">Street Health</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2366,7 +2539,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Community health org, not normally toured</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+142+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+142+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="government" data-neighborhood="None" data-plans="" data-search="fire station 142 fire hall access">
       <div class="card-top">
         <div class="card-name">Fire Station 142</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2374,7 +2547,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Fire hall access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Danforth+Mennonite+Church+2174+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Danforth+Mennonite+Church+2174+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="danforth mennonite church heritage church">
       <div class="card-top">
         <div class="card-name">Danforth Mennonite Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2382,7 +2555,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">2174 Danforth Ave, Toronto</span></div>
       <div class="card-note">Heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Messiah+240+Avenue+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Church+of+the+Messiah+240+Avenue+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="church of the messiah heritage church, anglican">
       <div class="card-top">
         <div class="card-name">Church of the Messiah</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2390,7 +2563,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">240 Avenue Rd, Toronto</span></div>
       <div class="card-note">Heritage church, Anglican</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Barnabas+on+the+Danforth+Anglican+Church+361+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Barnabas+on+the+Danforth+Anglican+Church+361+Danforth+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="st. barnabas on the danforth anglican church heritage church">
       <div class="card-top">
         <div class="card-name">St. Barnabas on the Danforth Anglican Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2398,7 +2571,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">361 Danforth Ave, Toronto</span></div>
       <div class="card-note">Heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Peter%27s+Estonian+Evangelical+Lutheran+Church+817+Mount+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+Peter%27s+Estonian+Evangelical+Lutheran+Church+817+Mount+Pleasant+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="st. peter&#39;s estonian evangelical lutheran church cultural heritage church">
       <div class="card-top">
         <div class="card-name">St. Peter's Estonian Evangelical Lutheran Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2406,7 +2579,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">817 Mount Pleasant Rd, Toronto</span></div>
       <div class="card-note">Cultural heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Kew+Beach+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Kew+Beach+Lawn+Bowling+Club+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="sports-recreation" data-neighborhood="None" data-plans="" data-search="kew beach lawn bowling club private club">
       <div class="card-top">
         <div class="card-name">Kew Beach Lawn Bowling Club</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2414,7 +2587,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Private club</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Evergreen+Brick+Works+550+Bayview+Ave%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Evergreen+Brick+Works+550+Bayview+Ave%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="industrial" data-neighborhood="None" data-plans="" data-search="evergreen brick works free (normally charges for some programs)">
       <div class="card-top">
         <div class="card-name">Evergreen Brick Works</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2422,7 +2595,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">550 Bayview Ave, Toronto</span></div>
       <div class="card-note">Free (normally charges for some programs)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Todmorden+Mills+67+Pottery+Rd%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Todmorden+Mills+67+Pottery+Rd%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="None" data-plans="" data-search="todmorden mills heritage museum, free">
       <div class="card-top">
         <div class="card-name">Todmorden Mills</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2430,7 +2603,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">67 Pottery Rd, Toronto</span></div>
       <div class="card-note">Heritage museum, free</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Riverdale+Hub+1326+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Riverdale+Hub+1326+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="cultural-centre" data-neighborhood="None" data-plans="" data-search="riverdale hub community centre, special programming">
       <div class="card-top">
         <div class="card-name">Riverdale Hub</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2438,7 +2611,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">1326 Gerrard St E, Toronto</span></div>
       <div class="card-note">Community centre, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Argonaut+Rowing+Club+1225+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Argonaut+Rowing+Club+1225+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="sports-recreation" data-neighborhood="None" data-plans="" data-search="argonaut rowing club normally members-only; structured tours (sun only)">
       <div class="card-top">
         <div class="card-name">Argonaut Rowing Club</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-sun">Sun only</span></div>
@@ -2449,7 +2622,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="scarborough">
   <div class="section-header">
     <span class="section-day">SCARBOROUGH</span>
     <h2 class="section-title">Scarborough</h2>
@@ -2457,7 +2630,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-scarborough"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=ZooShare+Biogas+Plant+Toronto+Zoo%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=ZooShare+Biogas+Plant+Toronto+Zoo%2C+Scarborough" target="_blank" rel="noopener" data-rarity="never-open" data-type="industrial" data-neighborhood="scarborough" data-plans="" data-search="zooshare biogas plant biogas facility using zoo waste; genuinely rare industrial access">
       <div class="card-top">
         <div class="card-name">ZooShare Biogas Plant</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2465,7 +2638,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto Zoo, Scarborough</span></div>
       <div class="card-note">Biogas facility using zoo waste; genuinely rare industrial access</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Muslims+in+Canada+Archives+Scarborough" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Muslims+in+Canada+Archives+Scarborough" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="scarborough" data-plans="" data-search="muslims in canada archives private archival institution">
       <div class="card-top">
         <div class="card-name">Muslims in Canada Archives</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2473,7 +2646,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Scarborough</span></div>
       <div class="card-note">Private archival institution</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hillside+Outdoor+Education+School+Scarborough" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Hillside+Outdoor+Education+School+Scarborough" target="_blank" rel="noopener" data-rarity="never-open" data-type="educational" data-neighborhood="scarborough" data-plans="" data-search="hillside outdoor education school school facility not normally open">
       <div class="card-top">
         <div class="card-name">Hillside Outdoor Education School</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2481,7 +2654,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Scarborough</span></div>
       <div class="card-note">School facility not normally open</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Archives+%26+Research+Centre+Scarborough" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Archives+%26+Research+Centre+Scarborough" target="_blank" rel="noopener" data-rarity="never-open" data-type="museum" data-neighborhood="scarborough" data-plans="" data-search="scarborough archives & research centre specialized archive">
       <div class="card-top">
         <div class="card-name">Scarborough Archives &amp; Research Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2489,7 +2662,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Scarborough</span></div>
       <div class="card-note">Specialized archive</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+442+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Fire+Station+442+Scarborough" target="_blank" rel="noopener" data-rarity="rare" data-type="government" data-neighborhood="scarborough" data-plans="" data-search="fire station 442 fire hall access">
       <div class="card-top">
         <div class="card-name">Fire Station 442</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2497,7 +2670,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Scarborough</span></div>
       <div class="card-note">Fire hall access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Knox+United+Church%2C+Agincourt+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Knox+United+Church%2C+Agincourt+Scarborough" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="scarborough" data-plans="" data-search="knox united church, agincourt heritage church">
       <div class="card-top">
         <div class="card-name">Knox United Church, Agincourt</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2505,7 +2678,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Scarborough</span></div>
       <div class="card-note">Heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Pan+Am+Sports+Centre+875+Morningside+Ave%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Toronto+Pan+Am+Sports+Centre+875+Morningside+Ave%2C+Scarborough" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="sports-recreation" data-neighborhood="scarborough" data-plans="" data-search="toronto pan am sports centre free (normally charges for recreation use)">
       <div class="card-top">
         <div class="card-name">Toronto Pan Am Sports Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2513,7 +2686,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">875 Morningside Ave, Scarborough</span></div>
       <div class="card-note">Free (normally charges for recreation use)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Clark+Centre+for+the+Arts+191+Guildwood+Pkwy%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Clark+Centre+for+the+Arts+191+Guildwood+Pkwy%2C+Scarborough" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="arts-creative" data-neighborhood="scarborough" data-plans="" data-search="clark centre for the arts arts centre, free programming">
       <div class="card-top">
         <div class="card-name">Clark Centre for the Arts</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2521,7 +2694,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">191 Guildwood Pkwy, Scarborough</span></div>
       <div class="card-note">Arts centre, free programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Cedar+Ridge+Creative+Centre+225+Confederation+Dr%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Cedar+Ridge+Creative+Centre+225+Confederation+Dr%2C+Scarborough" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="scarborough" data-plans="" data-search="cedar ridge creative centre historic estate / gallery, special access">
       <div class="card-top">
         <div class="card-name">Cedar Ridge Creative Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2529,7 +2702,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">225 Confederation Dr, Scarborough</span></div>
       <div class="card-note">Historic estate / gallery, special access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=John+McKenzie+House+34+Parkview+Ave%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=John+McKenzie+House+34+Parkview+Ave%2C+Scarborough" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="museum" data-neighborhood="scarborough" data-plans="" data-search="john mckenzie house historic house museum">
       <div class="card-top">
         <div class="card-name">John McKenzie House</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2537,7 +2710,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">34 Parkview Ave, Scarborough</span></div>
       <div class="card-note">Historic house museum</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Museum+1007+Brimley+Rd%2C+Scarborough" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Scarborough+Museum+1007+Brimley+Rd%2C+Scarborough" target="_blank" rel="noopener" data-rarity="special-programming" data-type="museum" data-neighborhood="scarborough" data-plans="" data-search="scarborough museum free (normally charges)">
       <div class="card-top">
         <div class="card-name">Scarborough Museum</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2548,7 +2721,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 
-<section class="section">
+<section class="section" data-neighborhood-section="etobicoke">
   <div class="section-header">
     <span class="section-day">ETOBICOKE</span>
     <h2 class="section-title">Etobicoke / Weston / Humber</h2>
@@ -2556,7 +2729,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
   <div class="section-map" id="map-etobicoke"></div>
   <div class="grid">
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=YZD+Experience+Centre+Etobicoke+%28Pearson-adjacent%29" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=YZD+Experience+Centre+Etobicoke+%28Pearson-adjacent%29" target="_blank" rel="noopener" data-rarity="never-open" data-type="office-private" data-neighborhood="None" data-plans="" data-new="true" data-search="yzd experience centre pearson-adjacent; limited source detail">
       <div class="card-top">
         <div class="card-name">YZD Experience Centre</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
@@ -2564,7 +2737,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Etobicoke (Pearson-adjacent)</span></div>
       <div class="card-note">Pearson-adjacent; limited source detail</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Weston+Masonic+Temple+Weston%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Weston+Masonic+Temple+Weston%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="None" data-plans="" data-search="weston masonic temple masonic lodge, private">
       <div class="card-top">
         <div class="card-name">Weston Masonic Temple</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2572,7 +2745,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Weston, Toronto</span></div>
       <div class="card-note">Masonic lodge, private</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ukrainian+Catholic+Church+of+the+Holy+Protection+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ukrainian+Catholic+Church+of+the+Holy+Protection+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="religious" data-neighborhood="None" data-plans="" data-search="ukrainian catholic church of the holy protection heritage church, limited public access">
       <div class="card-top">
         <div class="card-name">Ukrainian Catholic Church of the Holy Protection</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2580,7 +2753,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">Heritage church, limited public access</div>
     </a>
-    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Mabelle+Park+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Mabelle+Park+Etobicoke%2C+Toronto" target="_blank" rel="noopener" data-rarity="never-open" data-type="park-outdoor" data-neighborhood="None" data-plans="" data-search="mabelle park community-built park, special programming">
       <div class="card-top">
         <div class="card-name">Mabelle Park</div>
         <div class="card-badges"><span class="badge badge-rarity-red">🔴</span></div>
@@ -2588,7 +2761,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
       <div class="card-note">Community-built park, special programming</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lambton+House+4066+Old+Dundas+St%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Lambton+House+4066+Old+Dundas+St%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="historic" data-neighborhood="None" data-plans="" data-search="lambton house 1847 heritage inn, limited hours normally">
       <div class="card-top">
         <div class="card-name">Lambton House</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2596,7 +2769,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">4066 Old Dundas St, Toronto</span></div>
       <div class="card-note">1847 heritage inn, limited hours normally</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Valley+United+Church+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Valley+United+Church+Etobicoke%2C+Toronto" target="_blank" rel="noopener" data-rarity="rare" data-type="religious" data-neighborhood="None" data-plans="" data-search="humber valley united church heritage church">
       <div class="card-top">
         <div class="card-name">Humber Valley United Church</div>
         <div class="card-badges"><span class="badge badge-rarity-orange">🟠</span></div>
@@ -2604,7 +2777,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
       <div class="card-note">Heritage church</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Montgomery%27s+Inn+4709+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Montgomery%27s+Inn+4709+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="historic" data-neighborhood="None" data-plans="" data-search="montgomery&#39;s inn free (normally charges); 1830s heritage inn">
       <div class="card-top">
         <div class="card-name">Montgomery's Inn</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2612,7 +2785,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">4709 Dundas St W, Toronto</span></div>
       <div class="card-note">Free (normally charges); 1830s heritage inn</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Cultural+Hub+Etobicoke%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Cultural+Hub+Etobicoke%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="None" data-plans="" data-search="humber cultural hub special access">
       <div class="card-top">
         <div class="card-name">Humber Cultural Hub</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2620,7 +2793,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Etobicoke, Toronto</span></div>
       <div class="card-note">Special access</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Lakeshore+Arts+and+Media+Studios+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Humber+Lakeshore+Arts+and+Media+Studios+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="educational" data-neighborhood="None" data-plans="" data-search="humber lakeshore arts and media studios college studios">
       <div class="card-top">
         <div class="card-name">Humber Lakeshore Arts and Media Studios</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span></div>
@@ -2628,7 +2801,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">Toronto</span></div>
       <div class="card-note">College studios</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Applewood+Shaver+House+450+The+West+Mall%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=Applewood+Shaver+House+450+The+West+Mall%2C+Toronto" target="_blank" rel="noopener" data-rarity="fee-normally" data-type="historic" data-neighborhood="None" data-plans="" data-search="applewood shaver house birthplace of j.s. woodsworth; 1851 house moved to preserve it (sun only)">
       <div class="card-top">
         <div class="card-name">Applewood Shaver House</div>
         <div class="card-badges"><span class="badge badge-rarity-yellow">🟡</span><span class="badge badge-sun">Sun only</span></div>
@@ -2636,7 +2809,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div class="card-meta"><span class="card-addr">450 The West Mall, Toronto</span></div>
       <div class="card-note">Birthplace of J.S. Woodsworth; 1851 house moved to preserve it (Sun only)</div>
     </a>
-    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Church+On+The+Hill+4600+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener">
+    <a class="card" href="https://www.google.com/maps/search/?api=1&query=St.+George%27s+Church+On+The+Hill+4600+Dundas+St+W%2C+Toronto" target="_blank" rel="noopener" data-rarity="special-programming" data-type="religious" data-neighborhood="None" data-plans="" data-search="st. george&#39;s church on the hill heritage church">
       <div class="card-top">
         <div class="card-name">St. George's Church On The Hill</div>
         <div class="card-badges"><span class="badge badge-rarity-green">🟢</span></div>
@@ -2647,7 +2820,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   </div>
 </section>
 <!-- ════════════════ OUT-OF-RANGE CINEPLEX ════════════════ -->
-<section class="section">
+<section class="section" data-neighborhood-section="faraway">
   <div class="section-header">
     <span class="section-day">BEYOND 10 KM</span>
     <h2 class="section-title">Other Cineplex Locations</h2>
@@ -3044,5 +3217,126 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </script>
 
 
+<script>
+
+// ─── FILTER SYSTEM ─────────────────────────────────────────────
+(function() {
+  var ACTIVE = { rarity: new Set(), type: new Set(), neighborhood: new Set(),
+                 'new': new Set(), plan: new Set() };
+  var TEXT = '';
+  var TOTAL_SITES = 154;
+
+  var bar = document.getElementById('filterbar');
+  var body = document.getElementById('filterbarBody');
+  var toggle = document.getElementById('filterToggle');
+  var resultsEl = document.getElementById('filterResults');
+  var clearBtn = document.getElementById('filterClear');
+  var searchInput = document.getElementById('filterSearch');
+  var activeCountEl = document.getElementById('filterActiveCount');
+  var noResultsBanner;
+
+  // Create no-results banner
+  function getBanner() {
+    if (!noResultsBanner) {
+      noResultsBanner = document.getElementById('noResultsBanner');
+      if (!noResultsBanner) {
+        noResultsBanner = document.createElement('div');
+        noResultsBanner.id = 'noResultsBanner';
+        noResultsBanner.className = 'no-results-banner';
+        noResultsBanner.innerHTML = '<strong>No sites match these filters.</strong><br><br><button class="filter-clear" onclick="document.getElementById(\'filterClear\').click()" style="margin-top:10px">Clear all filters</button>';
+        bar.parentNode.insertBefore(noResultsBanner, bar.nextSibling);
+      }
+    }
+    return noResultsBanner;
+  }
+
+  function totalActive() {
+    var n = ACTIVE.rarity.size + ACTIVE.type.size + ACTIVE.neighborhood.size
+          + ACTIVE['new'].size + ACTIVE.plan.size;
+    if (TEXT) n++;
+    return n;
+  }
+
+  function apply() {
+    var cards = document.querySelectorAll('a.card[data-rarity]');
+    var visibleCount = 0;
+    cards.forEach(function(card) {
+      var ok = true;
+      if (ACTIVE.rarity.size > 0 && !ACTIVE.rarity.has(card.dataset.rarity)) ok = false;
+      if (ok && ACTIVE.type.size > 0 && !ACTIVE.type.has(card.dataset.type)) ok = false;
+      if (ok && ACTIVE.neighborhood.size > 0 && !ACTIVE.neighborhood.has(card.dataset.neighborhood)) ok = false;
+      if (ok && ACTIVE['new'].size > 0 && card.dataset['new'] !== 'true') ok = false;
+      if (ok && ACTIVE.plan.size > 0) {
+        var cardPlans = (card.dataset.plans || '').split(' ');
+        var hit = false;
+        ACTIVE.plan.forEach(function(p) { if (cardPlans.indexOf(p) >= 0) hit = true; });
+        if (!hit) ok = false;
+      }
+      if (ok && TEXT && (card.dataset.search || '').indexOf(TEXT) === -1) ok = false;
+
+      card.classList.toggle('card-hidden', !ok);
+      if (ok) visibleCount++;
+    });
+
+    // Hide neighborhood sections with no visible cards
+    document.querySelectorAll('section[data-neighborhood-section]').forEach(function(sec) {
+      var any = sec.querySelectorAll('a.card[data-rarity]:not(.card-hidden)').length;
+      sec.classList.toggle('section-hidden', any === 0);
+    });
+
+    resultsEl.textContent = visibleCount + ' of ' + TOTAL_SITES + ' sites';
+    var n = totalActive();
+    if (n > 0) {
+      activeCountEl.hidden = false;
+      activeCountEl.textContent = n;
+      clearBtn.hidden = false;
+    } else {
+      activeCountEl.hidden = true;
+      clearBtn.hidden = true;
+    }
+    getBanner().className = 'no-results-banner' + (visibleCount === 0 && n > 0 ? ' show' : '');
+  }
+
+  // Wire chips
+  bar.addEventListener('click', function(e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    var f = chip.dataset.filter;
+    var v = chip.dataset.value;
+    if (!f || !v) return;
+    var set = ACTIVE[f];
+    if (set.has(v)) { set.delete(v); chip.classList.remove('active'); }
+    else { set.add(v); chip.classList.add('active'); }
+    apply();
+  });
+
+  // Toggle filter body
+  toggle.addEventListener('click', function() {
+    var expanded = !body.hidden;
+    body.hidden = expanded;
+    toggle.setAttribute('aria-expanded', String(!expanded));
+  });
+
+  // Clear all
+  clearBtn.addEventListener('click', function() {
+    Object.keys(ACTIVE).forEach(function(k) { ACTIVE[k].clear(); });
+    TEXT = '';
+    searchInput.value = '';
+    bar.querySelectorAll('.chip.active').forEach(function(c) { c.classList.remove('active'); });
+    apply();
+  });
+
+  // Search input
+  var searchTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function() {
+      TEXT = searchInput.value.trim().toLowerCase();
+      apply();
+    }, 120);
+  });
+})();
+
+</script>
 </body>
 </html>
