@@ -269,6 +269,56 @@
     a.card.cinema { padding: 18px 20px; }
     a.card.cinema .card-name { font-size: 22px; }
   }
+/* ── VOTE WIDGET ────────────────────────────────────────────── */
+.vote { background: var(--ink); color: var(--paper); padding: 36px 40px; }
+.vote-inner { max-width: 900px; margin: 0 auto; }
+.vote-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
+.vote h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 40px); font-weight: 900; letter-spacing: -1px; margin: 10px 0 6px; line-height: 1; }
+.vote h2 em { font-style: italic; font-weight: 400; color: var(--gold); }
+.vote-sub { font-size: 13px; color: rgba(245,240,232,0.55); font-weight: 300; letter-spacing: 0.03em; margin-bottom: 22px; }
+
+.vote-tally { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; padding: 16px 18px; background: rgba(255,255,255,0.04); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
+.tally-row { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.tally-label { min-width: 130px; color: rgba(245,240,232,0.85); font-weight: 500; }
+.tally-bar { flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; }
+.tally-fill { height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); transition: width 0.3s ease; width: 0%; }
+.tally-count { min-width: 24px; text-align: right; color: var(--paper); font-weight: 600; }
+
+.vote-status { font-size: 12px; color: rgba(245,240,232,0.6); margin-bottom: 16px; letter-spacing: 0.04em; }
+.vote-status strong { color: var(--gold); font-weight: 600; }
+.vote-status.winner { color: #ffd970; font-size: 14px; }
+.vote-status.winner em { font-style: normal; font-weight: 700; color: var(--paper); }
+
+.vote-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+.plan-card { background: rgba(255,255,255,0.04); padding: 18px 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; position: relative; }
+.plan-card.winning { border-color: var(--gold); background: rgba(184,134,11,0.08); box-shadow: 0 0 0 1px var(--gold); }
+.plan-card.winning::before { content: 'WINNING'; position: absolute; top: -8px; right: 14px; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; color: var(--ink); background: var(--gold); padding: 3px 8px; border-radius: 3px; }
+.plan-card.tied.winning::before { content: 'TIED'; background: #c0392b; color: var(--paper); }
+
+.plan-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.25; margin-bottom: 4px; }
+.plan-detail { font-size: 12px; color: rgba(245,240,232,0.6); font-weight: 300; line-height: 1.4; margin-bottom: 14px; }
+
+.plan-votes { display: flex; gap: 6px; margin-bottom: 8px; }
+.voter-chip { flex: 1; padding: 9px 0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; color: rgba(245,240,232,0.5); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+.voter-chip:hover { background: rgba(255,255,255,0.14); color: var(--paper); }
+.voter-chip.voted { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.voter-chip.voted:hover { background: #d4a017; }
+
+.plan-count { font-size: 11px; color: rgba(245,240,232,0.45); letter-spacing: 0.05em; text-transform: uppercase; }
+.plan-count strong { color: var(--paper); font-weight: 700; font-size: 13px; }
+
+.vote-controls { margin-top: 22px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.vote-btn { padding: 8px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 4px; color: rgba(245,240,232,0.7); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; letter-spacing: 0.04em; transition: all 0.15s; }
+.vote-btn:hover { background: rgba(255,255,255,0.12); color: var(--paper); }
+.vote-btn.danger:hover { background: rgba(192,57,43,0.3); border-color: #c0392b; color: #ffb3a8; }
+
+@media (max-width: 600px) {
+  .vote { padding: 28px 22px; }
+  .vote-grid { grid-template-columns: 1fr; }
+  .tally-label { min-width: 100px; font-size: 11px; }
+}
+
 </style>
 </head>
 <body>
@@ -302,6 +352,75 @@
     <div class="crit">★ New 2026</div>
   </div>
 </div>
+
+<!-- ════════════════ VOTE ════════════════ -->
+<section class="vote">
+  <div class="vote-inner">
+    <div class="vote-tag">Democratic Vote · DY · SS · SU · BS</div>
+    <h2>Pick the <em>plan</em></h2>
+    <div class="vote-sub">Tap your initials on the plan you want. Pass the phone. Tap again to undo. Saved on this device.</div>
+
+    <div class="vote-tally" id="voteTally"></div>
+    <div class="vote-status" id="voteStatus">No votes yet · 4 needed</div>
+
+    <div class="vote-grid">
+
+      <div class="plan-card" data-plan="scotiabank">
+        <div class="plan-title">Scotiabank 6:50 PM</div>
+        <div class="plan-detail">UltraAVX · Downtown · full Doors Open day (15+ sites) → film evening</div>
+        <div class="plan-votes">
+          <button class="voter-chip" data-voter="DY" data-plan="scotiabank">DY</button>
+          <button class="voter-chip" data-voter="SS" data-plan="scotiabank">SS</button>
+          <button class="voter-chip" data-voter="SU" data-plan="scotiabank">SU</button>
+          <button class="voter-chip" data-voter="BS" data-plan="scotiabank">BS</button>
+        </div>
+        <div class="plan-count"><strong data-count="scotiabank">0</strong> / 4 votes</div>
+      </div>
+
+      <div class="plan-card" data-plan="varsity">
+        <div class="plan-title">Varsity 5:10 PM</div>
+        <div class="plan-detail">Regular · Yorkville/Annex · DO closes 5pm, film immediately after — zero compromise</div>
+        <div class="plan-votes">
+          <button class="voter-chip" data-voter="DY" data-plan="varsity">DY</button>
+          <button class="voter-chip" data-voter="SS" data-plan="varsity">SS</button>
+          <button class="voter-chip" data-voter="SU" data-plan="varsity">SU</button>
+          <button class="voter-chip" data-voter="BS" data-plan="varsity">BS</button>
+        </div>
+        <div class="plan-count"><strong data-count="varsity">0</strong> / 4 votes</div>
+      </div>
+
+      <div class="plan-card" data-plan="eglinton">
+        <div class="plan-title">Yonge-Eglinton 1:00 PM</div>
+        <div class="plan-detail">Regular · Sringeri temple at 10am → film at 1pm → Akin / Blessed Sacrament after</div>
+        <div class="plan-votes">
+          <button class="voter-chip" data-voter="DY" data-plan="eglinton">DY</button>
+          <button class="voter-chip" data-voter="SS" data-plan="eglinton">SS</button>
+          <button class="voter-chip" data-voter="SU" data-plan="eglinton">SU</button>
+          <button class="voter-chip" data-voter="BS" data-plan="eglinton">BS</button>
+        </div>
+        <div class="plan-count"><strong data-count="eglinton">0</strong> / 4 votes</div>
+      </div>
+
+      <div class="plan-card" data-plan="donmills">
+        <div class="plan-title">Don Mills 3:00 PM (19+)</div>
+        <div class="plan-detail">VIP Laser · Aga Khan + Ismaili Centre + JCCC cluster morning → film. Most architecturally singular cluster.</div>
+        <div class="plan-votes">
+          <button class="voter-chip" data-voter="DY" data-plan="donmills">DY</button>
+          <button class="voter-chip" data-voter="SS" data-plan="donmills">SS</button>
+          <button class="voter-chip" data-voter="SU" data-plan="donmills">SU</button>
+          <button class="voter-chip" data-voter="BS" data-plan="donmills">BS</button>
+        </div>
+        <div class="plan-count"><strong data-count="donmills">0</strong> / 4 votes</div>
+      </div>
+
+    </div>
+
+    <div class="vote-controls">
+      <button class="vote-btn danger" id="voteReset">Reset all votes</button>
+    </div>
+  </div>
+</section>
+
 
 <main class="main">
 
@@ -1800,6 +1919,150 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function () {
+  var KEY = 'doorsopen-vote-2026';
+  var VOTERS = ['DY', 'SS', 'SU', 'BS'];
+  var PLANS = ['scotiabank', 'varsity', 'eglinton', 'donmills'];
+  var LABELS = {
+    scotiabank: 'Scotiabank 6:50 PM',
+    varsity: 'Varsity 5:10 PM',
+    eglinton: 'Yonge-Eglinton 1:00 PM',
+    donmills: 'Don Mills 3:00 PM'
+  };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+  function save(state) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (e) { /* private mode or quota */ }
+  }
+  function tally(state) {
+    var counts = {};
+    PLANS.forEach(function (p) { counts[p] = 0; });
+    VOTERS.forEach(function (v) {
+      if (state[v] && counts.hasOwnProperty(state[v])) counts[state[v]]++;
+    });
+    return counts;
+  }
+  function totalVotes(state) {
+    var n = 0;
+    VOTERS.forEach(function (v) { if (state[v]) n++; });
+    return n;
+  }
+  function winners(counts) {
+    var max = 0;
+    PLANS.forEach(function (p) { if (counts[p] > max) max = counts[p]; });
+    if (max === 0) return [];
+    return PLANS.filter(function (p) { return counts[p] === max; });
+  }
+
+  function render() {
+    var state = load();
+    var counts = tally(state);
+    var total = totalVotes(state);
+    var winList = winners(counts);
+
+    // Update voter chips
+    document.querySelectorAll('.voter-chip').forEach(function (btn) {
+      var voter = btn.getAttribute('data-voter');
+      var plan = btn.getAttribute('data-plan');
+      if (state[voter] === plan) btn.classList.add('voted');
+      else btn.classList.remove('voted');
+    });
+
+    // Update counts on each plan card
+    PLANS.forEach(function (p) {
+      var el = document.querySelector('[data-count="' + p + '"]');
+      if (el) el.textContent = counts[p];
+    });
+
+    // Highlight winning card(s)
+    document.querySelectorAll('.plan-card').forEach(function (card) {
+      var plan = card.getAttribute('data-plan');
+      var isWinner = winList.indexOf(plan) !== -1 && total > 0;
+      var allIn = total === 4;
+      var tied = winList.length > 1;
+      card.classList.toggle('winning', isWinner && allIn);
+      card.classList.toggle('tied', tied);
+    });
+
+    // Tally bars
+    var tallyEl = document.getElementById('voteTally');
+    if (tallyEl) {
+      tallyEl.innerHTML = PLANS.map(function (p) {
+        var c = counts[p];
+        var pct = total > 0 ? (c / 4) * 100 : 0;
+        return '<div class="tally-row">' +
+          '<span class="tally-label">' + LABELS[p] + '</span>' +
+          '<div class="tally-bar"><div class="tally-fill" style="width:' + pct + '%"></div></div>' +
+          '<span class="tally-count">' + c + '</span>' +
+          '</div>';
+      }).join('');
+    }
+
+    // Status line
+    var statusEl = document.getElementById('voteStatus');
+    if (statusEl) {
+      var remaining = VOTERS.filter(function (v) { return !state[v]; });
+      if (total === 0) {
+        statusEl.className = 'vote-status';
+        statusEl.innerHTML = 'No votes yet · 4 needed';
+      } else if (total < 4) {
+        statusEl.className = 'vote-status';
+        statusEl.innerHTML = '<strong>' + total + ' / 4</strong> in · waiting on: ' + remaining.join(' · ');
+      } else if (winList.length === 1) {
+        statusEl.className = 'vote-status winner';
+        statusEl.innerHTML = '🏆 Winner: <em>' + LABELS[winList[0]] + '</em>';
+      } else {
+        statusEl.className = 'vote-status winner';
+        statusEl.innerHTML = '⚖️ Tie: <em>' + winList.map(function (p) { return LABELS[p]; }).join(' vs ') + '</em> · re-vote or arbitrate';
+      }
+    }
+  }
+
+  function vote(voter, plan) {
+    var state = load();
+    if (state[voter] === plan) {
+      // Tapping the same chip again unvotes
+      delete state[voter];
+    } else {
+      state[voter] = plan;
+    }
+    save(state);
+    render();
+  }
+
+  function reset() {
+    if (confirm('Clear all 4 votes? This cannot be undone.')) {
+      save({});
+      render();
+    }
+  }
+
+  // Wire up
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.voter-chip').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var voter = btn.getAttribute('data-voter');
+        var plan = btn.getAttribute('data-plan');
+        if (voter && plan) vote(voter, plan);
+      });
+    });
+    var resetBtn = document.getElementById('voteReset');
+    if (resetBtn) resetBtn.addEventListener('click', reset);
+    render();
+  });
+})();
+</script>
 
 </body>
 </html>
