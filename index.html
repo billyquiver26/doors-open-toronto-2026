@@ -319,9 +319,100 @@
   .tally-label { min-width: 100px; font-size: 11px; }
 }
 
+/* ── STICKY MINI-HEADER (appears on scroll) ───────────────── */
+.mini-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: var(--ink);
+  color: var(--paper);
+  z-index: 100;
+  transform: translateY(-100%);
+  transition: transform 0.25s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.mini-header.show { transform: translateY(0); }
+.mini-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 11px 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+.mini-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--paper);
+  text-decoration: none;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+}
+.mini-title em { color: var(--gold); font-style: italic; font-weight: 400; }
+.mini-legend {
+  display: flex;
+  gap: 5px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.mini-vote {
+  margin-left: auto;
+  padding: 7px 12px;
+  background: rgba(184,134,11,0.20);
+  color: var(--gold);
+  border: 1px solid rgba(184,134,11,0.35);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.mini-vote:hover { background: rgba(184,134,11,0.35); color: var(--paper); }
+.mini-vote span { font-family: 'DM Sans', sans-serif; font-weight: 600; }
+
+/* Sync status indicator */
+.sync-status {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 5px 11px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  border-radius: 3px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.sync-status.synced { color: #8fd9a7; background: rgba(39,124,77,0.18); }
+.sync-status.syncing, .sync-status.saving { color: var(--gold); background: rgba(184,134,11,0.18); }
+.sync-status.offline { color: #ffb3a8; background: rgba(192,57,43,0.22); }
+
+@media (max-width: 600px) {
+  .mini-inner { padding: 10px 18px; gap: 10px; }
+  .mini-title { font-size: 12px; }
+  .mini-legend { font-size: 11px; gap: 3px; }
+  .mini-vote { font-size: 10px; padding: 6px 9px; letter-spacing: 0.04em; }
+}
+
 </style>
 </head>
 <body>
+<a id="top"></a>
+<div class="mini-header" id="miniHeader">
+  <div class="mini-inner">
+    <a href="#top" class="mini-title">Doors Open <em>&amp; Obsession</em> · May 23</a>
+    <div class="mini-legend"><span title="Never open">🔴</span><span title="Rare">🟠</span><span title="Fee normally">🟡</span><span title="Open with programming">🟢</span></div>
+    <a href="#vote" class="mini-vote">🗳 <span id="miniVoteCount">— / 4</span></a>
+  </div>
+</div>
+
 
 <header class="header">
   <div class="header-inner">
@@ -354,7 +445,7 @@
 </div>
 
 <!-- ════════════════ VOTE ════════════════ -->
-<section class="vote">
+<section class="vote" id="vote">
   <div class="vote-inner">
     <div class="vote-tag">Democratic Vote · DY · SS · SU · BS</div>
     <h2>Pick the <em>plan</em></h2>
@@ -362,6 +453,7 @@
 
     <div class="vote-tally" id="voteTally"></div>
     <div class="vote-status" id="voteStatus">No votes yet · 4 needed</div>
+    <div class="sync-status syncing" id="syncStatus">⟳ Loading…</div>
 
     <div class="vote-grid">
 
@@ -1922,7 +2014,12 @@
 
 <script>
 (function () {
-  var KEY = 'doorsopen-vote-2026';
+  var SB_URL = 'https://kvlgafyvfcdcxyqvfwpq.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2bGdhZnl2ZmNkY3h5cXZmd3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3Nzk3MzksImV4cCI6MjA4OTM1NTczOX0.HIc5O7dXNMEmTAj3xE2Y3mpPwUPMto1WYqTnYGhZ8Dg';
+  var TABLE = 'doorsopen_vote';
+  var ENDPOINT = SB_URL + '/rest/v1/' + TABLE;
+  var POLL_MS = 3000;
+
   var VOTERS = ['DY', 'SS', 'SU', 'BS'];
   var PLANS = ['scotiabank', 'varsity', 'eglinton', 'donmills'];
   var LABELS = {
@@ -1932,28 +2029,118 @@
     donmills: 'Don Mills 3:00 PM'
   };
 
-  function load() {
-    try {
-      var raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) {
-      return {};
-    }
+  var state = {};
+  var writing = false;
+
+  function headers(extra) {
+    var h = {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json'
+    };
+    if (extra) for (var k in extra) h[k] = extra[k];
+    return h;
   }
-  function save(state) {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    } catch (e) { /* private mode or quota */ }
+
+  function setSync(status) {
+    var el = document.getElementById('syncStatus');
+    if (!el) return;
+    el.className = 'sync-status ' + status;
+    if (status === 'syncing') el.textContent = '⟳ Loading…';
+    else if (status === 'saving') el.textContent = '⟳ Saving…';
+    else if (status === 'offline') el.textContent = '⚠ Offline · vote not saved · check connection';
+    else el.textContent = '✓ Live · synced across all devices';
   }
-  function tally(state) {
-    var counts = {};
-    PLANS.forEach(function (p) { counts[p] = 0; });
+
+  function load(callback) {
+    fetch(ENDPOINT + '?id=eq.master&select=votes', { headers: headers() })
+      .then(function (r) {
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        if (data && data[0] && data[0].votes) state = data[0].votes;
+        else state = {};
+        setSync('synced');
+        if (callback) callback();
+      })
+      .catch(function () {
+        setSync('offline');
+        if (callback) callback();
+      });
+  }
+
+  function castVote(voter, plan) {
+    if (writing) return;
+    writing = true;
+    setSync('saving');
+
+    // Fetch fresh state, merge, PATCH — race-safe
+    fetch(ENDPOINT + '?id=eq.master&select=votes', { headers: headers() })
+      .then(function (r) {
+        if (!r.ok) throw new Error('read failed');
+        return r.json();
+      })
+      .then(function (data) {
+        var current = (data && data[0] && data[0].votes) ? data[0].votes : {};
+        // Toggle: same plan = unvote; different plan = move; no current vote = set
+        if (current[voter] === plan) delete current[voter];
+        else current[voter] = plan;
+        return fetch(ENDPOINT + '?id=eq.master', {
+          method: 'PATCH',
+          headers: headers({ 'Prefer': 'return=representation' }),
+          body: JSON.stringify({ votes: current, updated_at: new Date().toISOString() })
+        });
+      })
+      .then(function (r) {
+        if (!r.ok) throw new Error('patch failed');
+        return r.json();
+      })
+      .then(function (data) {
+        if (data && data[0]) state = data[0].votes || {};
+        writing = false;
+        setSync('synced');
+        render();
+      })
+      .catch(function () {
+        writing = false;
+        setSync('offline');
+        render();
+      });
+  }
+
+  function resetAll() {
+    if (writing) return;
+    if (!confirm('Clear all 4 votes? This affects every device. Cannot be undone.')) return;
+    writing = true;
+    setSync('saving');
+    fetch(ENDPOINT + '?id=eq.master', {
+      method: 'PATCH',
+      headers: headers(),
+      body: JSON.stringify({ votes: {}, updated_at: new Date().toISOString() })
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('reset failed');
+        state = {};
+        writing = false;
+        setSync('synced');
+        render();
+      })
+      .catch(function () {
+        writing = false;
+        setSync('offline');
+      });
+  }
+
+  function tally() {
+    var c = {};
+    PLANS.forEach(function (p) { c[p] = 0; });
     VOTERS.forEach(function (v) {
-      if (state[v] && counts.hasOwnProperty(state[v])) counts[state[v]]++;
+      if (state[v] && c.hasOwnProperty(state[v])) c[state[v]]++;
     });
-    return counts;
+    return c;
   }
-  function totalVotes(state) {
+  function totalVotes() {
     var n = 0;
     VOTERS.forEach(function (v) { if (state[v]) n++; });
     return n;
@@ -1966,39 +2153,35 @@
   }
 
   function render() {
-    var state = load();
-    var counts = tally(state);
-    var total = totalVotes(state);
+    var counts = tally();
+    var total = totalVotes();
     var winList = winners(counts);
 
-    // Update voter chips
+    // Voter chips
     document.querySelectorAll('.voter-chip').forEach(function (btn) {
-      var voter = btn.getAttribute('data-voter');
-      var plan = btn.getAttribute('data-plan');
-      if (state[voter] === plan) btn.classList.add('voted');
-      else btn.classList.remove('voted');
+      var v = btn.getAttribute('data-voter');
+      var p = btn.getAttribute('data-plan');
+      btn.classList.toggle('voted', state[v] === p);
     });
-
-    // Update counts on each plan card
+    // Counts
     PLANS.forEach(function (p) {
       var el = document.querySelector('[data-count="' + p + '"]');
       if (el) el.textContent = counts[p];
     });
-
-    // Highlight winning card(s)
+    // Winner highlight
     document.querySelectorAll('.plan-card').forEach(function (card) {
-      var plan = card.getAttribute('data-plan');
-      var isWinner = winList.indexOf(plan) !== -1 && total > 0;
+      var p = card.getAttribute('data-plan');
+      var isW = winList.indexOf(p) !== -1 && total > 0;
       var allIn = total === 4;
       var tied = winList.length > 1;
-      card.classList.toggle('winning', isWinner && allIn);
+      card.classList.toggle('winning', isW && allIn);
       card.classList.toggle('tied', tied);
     });
 
     // Tally bars
-    var tallyEl = document.getElementById('voteTally');
-    if (tallyEl) {
-      tallyEl.innerHTML = PLANS.map(function (p) {
+    var tEl = document.getElementById('voteTally');
+    if (tEl) {
+      tEl.innerHTML = PLANS.map(function (p) {
         var c = counts[p];
         var pct = total > 0 ? (c / 4) * 100 : 0;
         return '<div class="tally-row">' +
@@ -2009,60 +2192,75 @@
       }).join('');
     }
 
-    // Status line
-    var statusEl = document.getElementById('voteStatus');
-    if (statusEl) {
+    // Status
+    var sEl = document.getElementById('voteStatus');
+    if (sEl) {
       var remaining = VOTERS.filter(function (v) { return !state[v]; });
       if (total === 0) {
-        statusEl.className = 'vote-status';
-        statusEl.innerHTML = 'No votes yet · 4 needed';
+        sEl.className = 'vote-status';
+        sEl.innerHTML = 'No votes yet · 4 needed';
       } else if (total < 4) {
-        statusEl.className = 'vote-status';
-        statusEl.innerHTML = '<strong>' + total + ' / 4</strong> in · waiting on: ' + remaining.join(' · ');
+        sEl.className = 'vote-status';
+        sEl.innerHTML = '<strong>' + total + ' / 4</strong> in · waiting on: ' + remaining.join(' · ');
       } else if (winList.length === 1) {
-        statusEl.className = 'vote-status winner';
-        statusEl.innerHTML = '🏆 Winner: <em>' + LABELS[winList[0]] + '</em>';
+        sEl.className = 'vote-status winner';
+        sEl.innerHTML = '🏆 Winner: <em>' + LABELS[winList[0]] + '</em>';
       } else {
-        statusEl.className = 'vote-status winner';
-        statusEl.innerHTML = '⚖️ Tie: <em>' + winList.map(function (p) { return LABELS[p]; }).join(' vs ') + '</em> · re-vote or arbitrate';
+        sEl.className = 'vote-status winner';
+        sEl.innerHTML = '⚖️ Tie: <em>' + winList.map(function (p) { return LABELS[p]; }).join(' vs ') + '</em> — re-vote or arbitrate';
+      }
+    }
+
+    // Mini-header vote indicator
+    var mEl = document.getElementById('miniVoteCount');
+    if (mEl) {
+      if (total === 4 && winList.length === 1) {
+        mEl.textContent = '🏆 ' + LABELS[winList[0]].split(' ')[0];
+      } else if (total === 4 && winList.length > 1) {
+        mEl.textContent = 'TIE';
+      } else {
+        mEl.textContent = total + ' / 4';
       }
     }
   }
 
-  function vote(voter, plan) {
-    var state = load();
-    if (state[voter] === plan) {
-      // Tapping the same chip again unvotes
-      delete state[voter];
-    } else {
-      state[voter] = plan;
-    }
-    save(state);
-    render();
+  function onScroll() {
+    var mini = document.getElementById('miniHeader');
+    if (!mini) return;
+    mini.classList.toggle('show', window.scrollY > 240);
   }
 
-  function reset() {
-    if (confirm('Clear all 4 votes? This cannot be undone.')) {
-      save({});
-      render();
-    }
-  }
-
-  // Wire up
   document.addEventListener('DOMContentLoaded', function () {
+    // Wire chips
     document.querySelectorAll('.voter-chip').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var voter = btn.getAttribute('data-voter');
-        var plan = btn.getAttribute('data-plan');
-        if (voter && plan) vote(voter, plan);
+        var v = btn.getAttribute('data-voter');
+        var p = btn.getAttribute('data-plan');
+        if (v && p) castVote(v, p);
       });
     });
-    var resetBtn = document.getElementById('voteReset');
-    if (resetBtn) resetBtn.addEventListener('click', reset);
-    render();
+    var rb = document.getElementById('voteReset');
+    if (rb) rb.addEventListener('click', resetAll);
+
+    // Scroll listener
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () { onScroll(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Initial load + poll
+    setSync('syncing');
+    load(function () { render(); });
+    setInterval(function () {
+      if (!writing) load(function () { render(); });
+    }, POLL_MS);
   });
 })();
 </script>
+
 
 </body>
 </html>
