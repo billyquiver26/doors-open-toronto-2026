@@ -3,117 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Doors Open Toronto + Obsession — May 23, 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Doors Open Toronto + Obsession — Cineplex Showtimes May 23</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1a1614;
-    --paper: #f5f0e8;
-    --cream: #ede7d6;
-    --red: #c0392b;
-    --gold: #b8860b;
-    --muted: #7a7062;
-    --border: #d4c9b0;
-    --film: #6a1b9a;
+    /* Cineplex brand palette */
+    --cineplex-navy: #0E2240;
+    --cineplex-red: #E2231A;
+    --cineplex-red-dark: #B81A14;
+    --cineplex-gold: #C5A572;
+    --cineplex-gold-bright: #D9BA84;
+    --ultraavx-gold: #B89352;
+    --vip-purple: #4A1A4F;
+    --ink: #0F0F12;
+    --charcoal: #1f2024;
+    --paper: #ffffff;
+    --bg: #f4f4f6;
+    --muted: #6b6e75;
+    --border: #d8dadf;
+    --rare-red:    #c0392b;
+    --rare-orange: #d27a2e;
+    --rare-yellow: #b8860b;
+    --rare-green:  #1e6e44;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 400; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 
-  .header { background: var(--ink); color: var(--paper); padding: 60px 40px 50px; position: relative; overflow: hidden; }
-  .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px); }
-  .header-inner { max-width: 900px; margin: 0 auto; position: relative; }
-  .header-tag { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-  .header h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 7vw, 80px); font-weight: 900; line-height: 0.95; letter-spacing: -2px; margin-bottom: 20px; }
-  .header h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
-  .header-sub { font-size: 14px; color: rgba(245,240,232,0.6); font-weight: 300; letter-spacing: 0.05em; }
-  .header-meta { display: flex; gap: 32px; margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap; }
+  .header {
+    background: linear-gradient(180deg, var(--cineplex-navy) 0%, #081428 100%);
+    color: var(--paper);
+    padding: 56px 40px 44px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--cineplex-red);
+  }
+  .header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(circle at 80% 30%, rgba(197,165,114,0.08) 0%, transparent 50%),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 940px; margin: 0 auto; position: relative; }
+
+  .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .brand-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: var(--cineplex-red);
+    border-radius: 4px;
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: var(--paper);
+    letter-spacing: -0.5px;
+  }
+  .brand-text { font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: 0.18em; color: var(--cineplex-gold); text-transform: uppercase; }
+  .brand-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.25); }
+  .brand-sub { font-size: 11px; letter-spacing: 0.18em; color: rgba(255,255,255,0.5); text-transform: uppercase; font-weight: 500; }
+
+  .header h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(44px, 8vw, 92px);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .header h1 em { font-style: italic; color: var(--cineplex-red); font-weight: 400; }
+  .header-sub { font-size: 14px; color: rgba(255,255,255,0.65); font-weight: 400; letter-spacing: 0.02em; max-width: 640px; }
+
+  .header-meta { display: flex; gap: 28px; margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap; }
   .meta-item { display: flex; flex-direction: column; gap: 4px; }
-  .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.4); }
-  .meta-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--paper); }
+  .meta-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 500; }
+  .meta-val { font-family: 'Anton', sans-serif; font-size: 24px; color: var(--paper); letter-spacing: 0.02em; }
 
-  .criteria-bar { background: var(--red); padding: 14px 40px; }
-  .criteria-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-  .crit { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.95); letter-spacing: 0.04em; }
+  .criteria-bar { background: var(--cineplex-red); padding: 12px 40px; }
+  .criteria-inner { max-width: 940px; margin: 0 auto; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+  .crit { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: var(--paper); letter-spacing: 0.02em; }
 
-  .main { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+  .main { max-width: 940px; margin: 0 auto; padding: 0 40px 60px; }
 
-  .section { margin-top: 60px; }
-  .section.film .section-header { border-bottom-color: var(--film); }
-  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
-  .section-day { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); white-space: nowrap; }
-  .section.film .section-day { color: var(--film); }
-  .section-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .section { margin-top: 56px; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 0;
+    padding: 0 0 14px;
+    border-bottom: 3px solid var(--cineplex-navy);
+  }
+  .section-day {
+    font-family: 'Anton', sans-serif;
+    font-size: 12px; letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--cineplex-red);
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 32px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--cineplex-navy);
+  }
   .section-note { font-size: 12px; color: var(--muted); font-style: italic; margin-left: auto; white-space: nowrap; }
 
-  .sub-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin: 20px 0 6px; font-weight: 500; }
+  .sub-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin: 18px 0 6px; font-weight: 600; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 1px; }
-  .grid-cinemas { grid-template-columns: 1fr; }
 
-  a.card { background: var(--paper); padding: 18px 20px; position: relative; transition: background 0.15s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
-  a.card:hover { background: var(--cream); }
-  a.card::after { content: '↗'; position: absolute; top: 14px; right: 14px; font-size: 11px; color: var(--muted); opacity: 0; transition: opacity 0.15s; font-weight: 500; }
+  a.card { background: var(--paper); padding: 17px 19px; position: relative; transition: background 0.15s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
+  a.card:hover { background: var(--bg); }
+  a.card::after { content: '↗'; position: absolute; top: 13px; right: 13px; font-size: 11px; color: var(--muted); opacity: 0; transition: opacity 0.15s; font-weight: 600; }
   a.card:hover::after { opacity: 1; }
 
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; padding-right: 16px; }
-  .card-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; line-height: 1.25; letter-spacing: -0.2px; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; padding-right: 14px; }
+  .card-name { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: -0.1px; color: var(--ink); }
   .card-badges { display: flex; gap: 4px; flex-shrink: 0; align-items: flex-start; flex-wrap: wrap; justify-content: flex-end; }
-  .badge { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; }
-  .badge-rarity-red    { background: rgba(192,57,43,0.16); color: #a93226; }
-  .badge-rarity-orange { background: rgba(230,126,34,0.18); color: #b9651d; }
-  .badge-rarity-yellow { background: rgba(184,134,11,0.18); color: #8e6708; }
-  .badge-rarity-green  { background: rgba(39,124,77,0.16); color: #1e6e44; }
-  .badge-new { background: rgba(184,134,11,0.22); color: #8e6708; font-weight: 700; }
-  .badge-sun { background: rgba(0,0,0,0.06); color: var(--muted); font-weight: 500; }
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .badge-rarity-red    { background: rgba(192,57,43,0.14); color: var(--rare-red); }
+  .badge-rarity-orange { background: rgba(210,122,46,0.16); color: var(--rare-orange); }
+  .badge-rarity-yellow { background: rgba(184,134,11,0.16); color: var(--rare-yellow); }
+  .badge-rarity-green  { background: rgba(39,124,77,0.14); color: var(--rare-green); }
+  .badge-new           { background: var(--cineplex-gold); color: var(--ink); font-weight: 700; }
+  .badge-sun           { background: rgba(0,0,0,0.06); color: var(--muted); font-weight: 600; }
 
   .card-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
   .card-addr { font-size: 11px; color: var(--muted); letter-spacing: 0.01em; }
-  .card-note { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 9px; margin-top: 2px; }
+  .card-note { font-size: 12px; color: var(--muted); font-weight: 400; line-height: 1.55; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 2px; }
 
-  /* Standout (🔴 sites that are never normally open — featured) */
+  /* Standout DO cards */
   a.card.standout { background: var(--ink); color: var(--paper); }
   a.card.standout .card-name { color: var(--paper); }
-  a.card.standout .card-addr { color: rgba(245,240,232,0.5); }
-  a.card.standout .card-note { color: rgba(245,240,232,0.65); border-color: rgba(255,255,255,0.12); }
-  a.card.standout:hover { background: #2a2420; }
-  a.card.standout .badge-rarity-red    { background: rgba(192,57,43,0.30); color: #f0a89c; }
-  a.card.standout .badge-rarity-orange { background: rgba(230,126,34,0.25); color: #ffcc80; }
-  a.card.standout .badge-rarity-yellow { background: rgba(184,134,11,0.30); color: #ffd970; }
-  a.card.standout .badge-rarity-green  { background: rgba(39,124,77,0.30); color: #8fd9a7; }
-  a.card.standout .badge-new           { background: rgba(184,134,11,0.40); color: #ffd970; }
-  a.card.standout .badge-sun           { background: rgba(255,255,255,0.12); color: rgba(245,240,232,0.7); }
-  a.card.standout::after { color: rgba(245,240,232,0.5); }
+  a.card.standout .card-addr { color: rgba(255,255,255,0.5); }
+  a.card.standout .card-note { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.12); }
+  a.card.standout:hover { background: #1f2024; }
+  a.card.standout .badge-rarity-red    { background: rgba(226,35,26,0.30); color: #ff8a80; }
+  a.card.standout .badge-new           { background: var(--cineplex-gold); color: var(--ink); }
+  a.card.standout .badge-sun           { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+  a.card.standout::after { color: rgba(255,255,255,0.5); }
 
-  /* Cinema cards — distinct treatment, full-width */
-  a.card.cinema { background: var(--ink); color: var(--paper); padding: 22px 24px; }
-  a.card.cinema:hover { background: #2a2420; }
-  a.card.cinema .card-name { color: var(--paper); font-size: 19px; }
-  a.card.cinema .card-addr { color: rgba(245,240,232,0.55); font-size: 12px; }
-  a.card.cinema .card-note { color: rgba(245,240,232,0.7); border-color: rgba(255,255,255,0.14); }
-  a.card.cinema::after { color: rgba(245,240,232,0.5); }
-  .showtimes { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .showtime { display: inline-block; padding: 5px 9px; border-radius: 4px; font-size: 12px; font-weight: 500; background: rgba(255,255,255,0.10); color: var(--paper); letter-spacing: 0.02em; }
-  .showtime.ultra { background: rgba(184,134,11,0.28); color: #ffd970; }
-  .showtime.vip { background: rgba(106,27,154,0.32); color: #d9b3ff; }
-  .showtime-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin: 10px 0 4px; font-weight: 500; }
-  .recommend { display: inline-block; margin-top: 12px; padding: 6px 10px; background: rgba(192,57,43,0.22); color: #f5beb5; border-radius: 4px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
+  /* CINEMA CARDS — full-width, navy, Cineplex-branded */
+  a.card.cinema {
+    grid-column: 1 / -1;
+    background: var(--cineplex-navy);
+    color: var(--paper);
+    padding: 22px 26px;
+    border: none;
+    overflow: hidden;
+  }
+  a.card.cinema:hover { background: #142b50; }
+  a.card.cinema::after { color: rgba(255,255,255,0.5); top: 18px; right: 18px; }
 
-  .cinema-far { padding: 14px 18px; }
-  .cinema-far .card-name { font-size: 14px; }
+  .cinema-tag-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .cinema-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--cineplex-red);
+    color: var(--paper);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'Anton', sans-serif;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .cinema-distance { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+  a.card.cinema .card-name {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--paper);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    line-height: 1.05;
+  }
+  a.card.cinema .card-addr { color: rgba(255,255,255,0.55); font-size: 12px; display: block; margin-bottom: 6px; }
 
-  .footer { background: var(--ink); color: var(--paper); padding: 40px; margin-top: 80px; }
-  .footer-inner { max-width: 900px; margin: 0 auto; }
-  .footer-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--gold); }
-  .legend { display: flex; gap: 24px; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(245,240,232,0.7); }
-  .footer-note { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(245,240,232,0.45); line-height: 1.7; }
-  .footer-flag { background: rgba(192,57,43,0.22); padding: 10px 14px; border-radius: 4px; margin-top: 14px; font-size: 12px; color: #f5beb5; }
+  .showtime-block { margin-top: 14px; }
+  .showtime-label {
+    font-family: 'Anton', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--cineplex-gold);
+    margin-bottom: 6px;
+  }
+  .showtimes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .showtime {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.08);
+    color: var(--paper);
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(255,255,255,0.10);
+  }
+  .showtime.ultra {
+    background: linear-gradient(135deg, rgba(184,147,82,0.30) 0%, rgba(197,165,114,0.18) 100%);
+    color: var(--cineplex-gold-bright);
+    border-color: rgba(197,165,114,0.45);
+  }
+  .showtime.vip {
+    background: linear-gradient(135deg, rgba(74,26,79,0.55) 0%, rgba(197,165,114,0.18) 100%);
+    color: var(--cineplex-gold-bright);
+    border-color: rgba(197,165,114,0.35);
+  }
+  .recommend {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 8px 12px;
+    background: var(--cineplex-red);
+    color: var(--paper);
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .cinema-pairing {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.05);
+    border-left: 2px solid var(--cineplex-gold);
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.55;
+  }
+
+  /* Out-of-range cinema cards (charcoal, compact) */
+  a.card.cinema-far {
+    grid-column: auto;
+    background: var(--charcoal);
+    padding: 14px 16px;
+    color: var(--paper);
+  }
+  a.card.cinema-far:hover { background: #2a2b30; }
+  a.card.cinema-far .card-name { font-size: 14px; margin-bottom: 4px; color: var(--paper); }
+  a.card.cinema-far .card-addr { color: rgba(255,255,255,0.5); }
+  a.card.cinema-far::after { color: rgba(255,255,255,0.5); }
+
+  .footer { background: var(--cineplex-navy); color: var(--paper); padding: 40px; margin-top: 70px; border-top: 4px solid var(--cineplex-red); }
+  .footer-inner { max-width: 940px; margin: 0 auto; }
+  .footer-title { font-family: 'Anton', sans-serif; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; color: var(--cineplex-gold); }
+  .legend { display: flex; gap: 22px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.7); }
+  .footer-note { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+  .footer-flag {
+    background: rgba(226,35,26,0.18);
+    border-left: 3px solid var(--cineplex-red);
+    padding: 10px 14px;
+    border-radius: 3px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #ffb8b3;
+  }
+  .footer-disclaimer { margin-top: 18px; font-size: 10px; color: rgba(255,255,255,0.35); line-height: 1.6; }
 
   @media (max-width: 600px) {
     .header, .criteria-bar, .main, .footer { padding-left: 22px; padding-right: 22px; }
-    .header-meta { gap: 20px; }
+    .header-meta { gap: 18px; }
     .grid { grid-template-columns: 1fr; }
     .section-note { display: none; }
+    a.card.cinema { padding: 18px 20px; }
+    a.card.cinema .card-name { font-size: 22px; }
   }
 </style>
 </head>
@@ -121,14 +275,19 @@
 
 <header class="header">
   <div class="header-inner">
-    <div class="header-tag">Saturday May 23, 2026 · 10am – 5pm</div>
-    <h1>Doors Open<br><em>&amp; Obsession</em></h1>
-    <div class="header-sub">168 Doors Open sites across Toronto, paired with confirmed cinemas screening Obsession (2026). Click any card to open in Google Maps.</div>
+    <div class="brand-row">
+      <div class="brand-mark">C</div>
+      <div class="brand-text">Cineplex Showtimes</div>
+      <div class="brand-divider"></div>
+      <div class="brand-sub">Saturday May 23 · 2026</div>
+    </div>
+    <h1>Doors Open<br>&amp; <em>Obsession</em></h1>
+    <div class="header-sub">154 Doors Open Toronto sites organized by neighbourhood, each paired with its nearest Cineplex showing Obsession (2026). Tap any card to open in Google Maps.</div>
     <div class="header-meta">
-      <div class="meta-item"><span class="meta-label">DO Sites</span><span class="meta-val">168</span></div>
-      <div class="meta-item"><span class="meta-label">Cinemas (in range)</span><span class="meta-val">6</span></div>
-      <div class="meta-item"><span class="meta-label">Film runtime</span><span class="meta-val">1h 48m</span></div>
-      <div class="meta-item"><span class="meta-label">RT score</span><span class="meta-val">95%</span></div>
+      <div class="meta-item"><span class="meta-label">DO Sites</span><span class="meta-val">154</span></div>
+      <div class="meta-item"><span class="meta-label">Cineplex (≤10 km)</span><span class="meta-val">6</span></div>
+      <div class="meta-item"><span class="meta-label">Runtime</span><span class="meta-val">1h 48m</span></div>
+      <div class="meta-item"><span class="meta-label">RT</span><span class="meta-val">95%</span></div>
       <div class="meta-item"><span class="meta-label">Rating</span><span class="meta-val">14A</span></div>
     </div>
   </div>
@@ -136,152 +295,49 @@
 
 <div class="criteria-bar">
   <div class="criteria-inner">
-    <div class="crit">🔴 Never / almost never open</div>
-    <div class="crit">🟠 Rare (private / special only)</div>
-    <div class="crit">🟡 Fee / appointment normally</div>
-    <div class="crit">🟢 Open regularly, special programming</div>
+    <div class="crit">🔴 Never open</div>
+    <div class="crit">🟠 Rare</div>
+    <div class="crit">🟡 Fee normally</div>
+    <div class="crit">🟢 Open, special programming</div>
     <div class="crit">★ New 2026</div>
   </div>
 </div>
 
 <main class="main">
 
-<!-- ════════════════ CINEMAS — OBSESSION MAY 23 ════════════════ -->
-<section class="section film">
-  <div class="section-header">
-    <span class="section-day">FILM · MAY 23</span>
-    <h2 class="section-title">Obsession — Confirmed Showtimes</h2>
-    <span class="section-note">6 cinemas within 10 km of Bloor &amp; Ossington</span>
-  </div>
-  <div class="sub-label">Showtimes confirmed via Cineplex app · Doors Open closes 5pm — plan accordingly</div>
-
-  <div class="grid grid-cinemas">
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Scotiabank+Theatre+Toronto+259+Richmond+Street+West" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Scotiabank Theatre Toronto</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">Densest DO walk</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">259 Richmond St W · Entertainment District</span></div>
-      <div class="showtime-label">UltraAVX Laser</div>
-      <div class="showtimes">
-        <span class="showtime ultra">1:10 PM</span>
-        <span class="showtime ultra">4:00 PM</span>
-        <span class="showtime ultra">6:50 PM</span>
-        <span class="showtime ultra">9:40 PM</span>
-      </div>
-      <div class="showtime-label">Regular</div>
-      <div class="showtimes">
-        <span class="showtime">11:40 AM</span>
-        <span class="showtime">12:40 PM</span>
-        <span class="showtime">3:30 PM</span>
-        <span class="showtime">6:15 PM</span>
-        <span class="showtime">9:00 PM</span>
-      </div>
-      <div class="card-note">Pairs with the city's densest Doors Open cluster: Old City Hall 🔴, Osgoode Hall 🟠, City Hall 🟡, TIFF Lightbox 🟡, Steam Whistle 🟡, St. James, St. Lawrence Hall, Holy Trinity, Campbell House, Second City, TD Centre — 15+ sites within a 25-min walk.</div>
-      <div class="recommend">→ Strong pick: 6:50 PM UltraAVX after a full Doors Open day</div>
-    </a>
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Dundas+VIP+10+Dundas+East+Toronto" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Cineplex Yonge-Dundas &amp; VIP</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">Downtown anchor</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">10 Dundas St E · Downtown</span></div>
-      <div class="showtime-label">VIP (19+)</div>
-      <div class="showtimes">
-        <span class="showtime vip">12:30 PM</span>
-        <span class="showtime vip">4:00 PM</span>
-        <span class="showtime vip">7:15 PM</span>
-        <span class="showtime vip">10:00 PM</span>
-      </div>
-      <div class="showtime-label">Regular</div>
-      <div class="showtimes">
-        <span class="showtime">1:20 PM</span>
-        <span class="showtime">4:20 PM</span>
-        <span class="showtime">7:20 PM</span>
-        <span class="showtime">10:15 PM</span>
-      </div>
-      <div class="card-note">Same Downtown Core cluster as Scotiabank. Also close: TMU Architectural Science 🟡, Toronto Humane Society 🟡. The 4:20 PM Regular leaves the full Doors Open day intact.</div>
-    </a>
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Varsity+VIP+55+Bloor+West+Toronto" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Cineplex Varsity &amp; VIP</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">Best timing</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">55 Bloor St W · Yorkville / Annex</span></div>
-      <div class="showtime-label">Regular</div>
-      <div class="showtimes">
-        <span class="showtime">11:30 AM</span>
-        <span class="showtime">5:10 PM</span>
-        <span class="showtime">7:45 PM</span>
-        <span class="showtime">10:20 PM</span>
-      </div>
-      <div class="card-note">Yorkville/Annex cluster: Heliconian Hall 🔴, Women's Art Association 🔴, Bata 🟡, KPMB 🟠, Goethe / Alliance 🟠, U of T Physics deck 🟡, Hot Docs 🟡. Note the gap: no afternoon showings 11:30 AM → 5:10 PM.</div>
-      <div class="recommend">→ Top pick overall: 5:10 PM covers all of Doors Open (closes 5pm) with zero compromise</div>
-    </a>
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Eglinton+VIP+2300+Yonge+Toronto" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Cineplex Yonge-Eglinton &amp; VIP</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">Sringeri temple 2 blocks</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">2300 Yonge St · Midtown</span></div>
-      <div class="showtime-label">Regular</div>
-      <div class="showtimes">
-        <span class="showtime">1:00 PM</span>
-        <span class="showtime">3:40 PM</span>
-        <span class="showtime">6:30 PM</span>
-        <span class="showtime">9:40 PM</span>
-      </div>
-      <div class="card-note">Sringeri Vidya Bharati Foundation ★🔴 is literally 2 blocks south (2180 Yonge) — 9th-century Chola-style Hindu temple, normally inaccessible. Also Akin Davisville 🟡, Blessed Sacrament ★🟢, Manor Road United 🟠.</div>
-      <div class="recommend">→ Strong pick: 1:00 PM — hit Sringeri at 10am, film at 1pm, then Akin / Blessed Sacrament after</div>
-    </a>
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yorkdale+3401+Dufferin+Toronto" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Cineplex Yorkdale</div>
-        <div class="card-badges"><span class="badge badge-rarity-orange">Sparse cluster</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">Yorkdale Shopping Centre, Lawrence Ave W · North York</span></div>
-      <div class="showtime-label">UltraAVX</div>
-      <div class="showtimes">
-        <span class="showtime ultra">1:40 PM</span>
-        <span class="showtime ultra">4:30 PM</span>
-        <span class="showtime ultra">7:20 PM</span>
-        <span class="showtime ultra">10:15 PM</span>
-      </div>
-      <div class="card-note">No Regular showings. Least strategic for Doors Open pairing — Archives of Ontario at York campus ★🔴, Kadampa Buddhist Temple 🔴, Village at Black Creek 🟡, Historic Zion Schoolhouse 🟠 require driving/transit.</div>
-    </a>
-
-    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+VIP+Don+Mills+12+Marie+Labatte+Toronto" target="_blank" rel="noopener">
-      <div class="card-top">
-        <div class="card-name">Cineplex VIP Don Mills</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">Aga Khan / Ismaili / JCCC</span><span class="badge badge-sun">19+</span></div>
-      </div>
-      <div class="card-meta"><span class="card-addr">12 Marie Labatte Rd · Shops at Don Mills</span></div>
-      <div class="showtime-label">VIP Laser (19+ only)</div>
-      <div class="showtimes">
-        <span class="showtime vip">11:45 AM</span>
-        <span class="showtime vip">3:00 PM</span>
-        <span class="showtime vip">6:30 PM</span>
-        <span class="showtime vip">10:00 PM</span>
-      </div>
-      <div class="card-note">Pairs with the most architecturally singular cluster in Toronto: Aga Khan Museum 🟡 + Ismaili Centre ★🔴 (Fumihiko Maki prayer hall) + Japanese Canadian Cultural Centre 🟠 — all within 1 km of each other and the cinema.</div>
-      <div class="recommend">→ Strong pick: 3:00 PM — Wynford Drive cluster done by 1pm, film at 3pm</div>
-    </a>
-
-  </div>
-</section>
-
 <section class="section">
   <div class="section-header">
     <span class="section-day">DOWNTOWN</span>
     <h2 class="section-title">Downtown Core</h2>
-    <span class="section-note">Financial / Entertainment District · Densest Doors Open walk in the city</span>
+    <span class="section-note">Densest Doors Open walk in the city · 2 Cineplex theatres in this stack</span>
   </div>
   <div class="grid">
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Scotiabank+Theatre+Toronto+259+Richmond+Street+West" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · Densest DO walk</span>
+        <span class="cinema-distance">Downtown</span>
+      </div>
+      <div class="card-name">Scotiabank Theatre Toronto</div>
+      <span class="card-addr">259 Richmond St W · Entertainment District</span>
+      <div class="showtime-block"><div class="showtime-label">UltraAVX Laser</div><div class="showtimes"><span class="showtime ultra">1:10 PM</span><span class="showtime ultra">4:00 PM</span><span class="showtime ultra">6:50 PM</span><span class="showtime ultra">9:40 PM</span></div></div>
+      
+      <div class="showtime-block"><div class="showtime-label">Regular</div><div class="showtimes"><span class="showtime ">11:40 AM</span><span class="showtime ">12:40 PM</span><span class="showtime ">3:30 PM</span><span class="showtime ">6:15 PM</span><span class="showtime ">9:00 PM</span></div></div>
+      <div class="cinema-pairing">Pairs with 15+ Doors Open sites in a 25-min walk radius: Old City Hall 🔴, Osgoode Hall 🟠, City Hall 🟡, TIFF Lightbox 🟡, Steam Whistle 🟡, St. James, St. Lawrence Hall, Campbell House, Second City, TD Centre.</div>
+      <div class="recommend">→ Strong pick: 6:50 PM UltraAVX after a full Doors Open day</div>
+    </a>
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Dundas+VIP+10+Dundas+Street+East+Toronto" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · Downtown anchor</span>
+        <span class="cinema-distance">Downtown</span>
+      </div>
+      <div class="card-name">Cineplex Yonge-Dundas & VIP</div>
+      <span class="card-addr">10 Dundas St E · Downtown</span>
+      
+      <div class="showtime-block"><div class="showtime-label">VIP</div><div class="showtimes"><span class="showtime vip">12:30 PM</span><span class="showtime vip">4:00 PM</span><span class="showtime vip">7:15 PM</span><span class="showtime vip">10:00 PM</span></div></div>
+      <div class="showtime-block"><div class="showtime-label">Regular</div><div class="showtimes"><span class="showtime ">1:20 PM</span><span class="showtime ">4:20 PM</span><span class="showtime ">7:20 PM</span><span class="showtime ">10:15 PM</span></div></div>
+      <div class="cinema-pairing">Same Downtown Core cluster as Scotiabank. Also close: TMU Architectural Science 🟡, Toronto Humane Society 🟡.</div>
+      <div class="recommend">→ 4:20 PM Regular leaves the full Doors Open day intact</div>
+    </a>
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Old+City+Hall+60+Queen+St+W%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Old City Hall</div>
@@ -301,7 +357,7 @@
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=TVO+Studio+Tour+%26+Experience+2180+Yonge+St+area%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">TVO Studio Tour &amp; Experience</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">2180 Yonge St area, Toronto</span></div>
       <div class="card-note">Newly renovated public broadcaster studio; first time open</div>
@@ -585,7 +641,7 @@
   <div class="section-header">
     <span class="section-day">OLD TOWN</span>
     <h2 class="section-title">Old Town / Port Lands / East Downtown</h2>
-    <span class="section-note">Heritage industrial + new Indigenous & Port Lands sites</span>
+    <span class="section-note">Heritage industrial + new Indigenous & Port Lands sites · nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=25+Ookwemin+Street+281+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
@@ -599,7 +655,7 @@
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Anishnawbe+Health+Toronto+425+Cherry+St%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Anishnawbe Health Toronto</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">425 Cherry St, Toronto</span></div>
       <div class="card-note">New purpose-built Indigenous health facility, not normally toured</div>
@@ -675,7 +731,7 @@
   <div class="section-header">
     <span class="section-day">WATERFRONT</span>
     <h2 class="section-title">Waterfront / Harbourfront / Toronto Islands</h2>
-    <span class="section-note">Lake-facing heritage and infrastructure</span>
+    <span class="section-note">Lake-facing heritage and infrastructure · nearest Cineplex: Scotiabank (Downtown)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Redpath+Sugar+95+Queens+Quay+E%2C+Toronto" target="_blank" rel="noopener">
@@ -733,7 +789,7 @@
   <div class="section-header">
     <span class="section-day">DISTILLERY</span>
     <h2 class="section-title">Distillery District</h2>
-    
+    <span class="section-note">Nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
   <div class="grid">
     <a class="card" href="https://www.google.com/maps/search/?api=1&query=Daniels+Spectrum+585+Dundas+St+E%2C+Toronto" target="_blank" rel="noopener">
@@ -751,13 +807,13 @@
   <div class="section-header">
     <span class="section-day">WEST</span>
     <h2 class="section-title">West Toronto</h2>
-    <span class="section-note">Parkdale / Junction / Bloordale / Brockton — close to Bloor &amp; Ossington</span>
+    <span class="section-note">Parkdale / Junction / Bloordale / Brockton · Bloor &amp; Ossington home turf · nearest Cineplex: Varsity (Midtown)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Netflix+Toronto+Office+486+Front+St+W+%28The+Well%29%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Netflix Toronto Office</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">486 Front St W (The Well), Toronto</span></div>
       <div class="card-note">First-ever public opening — Canada's first Netflix office</div>
@@ -945,13 +1001,26 @@
   <div class="section-header">
     <span class="section-day">MIDTOWN</span>
     <h2 class="section-title">Midtown / Yorkville / Annex / U of T</h2>
-    <span class="section-note">Compact walkable cluster around Bloor and Avenue Rd</span>
+    <span class="section-note">Compact walkable cluster · 1 Cineplex theatre in this stack</span>
   </div>
   <div class="grid">
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Varsity+VIP+55+Bloor+Street+West+Toronto" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · Best timing</span>
+        <span class="cinema-distance">Midtown</span>
+      </div>
+      <div class="card-name">Cineplex Varsity & VIP</div>
+      <span class="card-addr">55 Bloor St W · Yorkville / Annex</span>
+      
+      
+      <div class="showtime-block"><div class="showtime-label">Regular</div><div class="showtimes"><span class="showtime ">11:30 AM</span><span class="showtime ">5:10 PM</span><span class="showtime ">7:45 PM</span><span class="showtime ">10:20 PM</span></div></div>
+      <div class="cinema-pairing">Yorkville/Annex cluster within 15-min walk: Heliconian Hall 🔴, Women's Art Association 🔴, Bata 🟡, KPMB 🟠, Goethe / Alliance 🟠, U of T Physics deck 🟡, Hot Docs 🟡. Note: no afternoon showings between 11:30 AM and 5:10 PM.</div>
+      <div class="recommend">→ Top pick overall: 5:10 PM covers all of Doors Open with zero compromise</div>
+    </a>
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Ismaili+Centre%2C+Toronto+49+Wynford+Dr%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Ismaili Centre, Toronto</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">49 Wynford Dr, Toronto</span></div>
       <div class="card-note">Fumihiko Maki-designed prayer hall — rarely open to non-community members</div>
@@ -1159,7 +1228,7 @@
     <a class="card" href="https://www.google.com/maps/search/?api=1&query=Blessed+Sacrament+Catholic+Church+24+Cheritan+Ave%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Blessed Sacrament Catholic Church</div>
-        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-green">🟢</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">24 Cheritan Ave, Toronto</span></div>
       <div class="card-note">100th anniversary programming</div>
@@ -1171,13 +1240,52 @@
   <div class="section-header">
     <span class="section-day">NORTH YORK</span>
     <h2 class="section-title">North York / Uptown / North Toronto</h2>
-    <span class="section-note">Driving / transit cluster — Wynford Dr is unmissable</span>
+    <span class="section-note">Driving / transit cluster · 3 Cineplex theatres in this stack</span>
   </div>
   <div class="grid">
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yonge-Eglinton+VIP+2300+Yonge+Street+Toronto" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · Sringeri 2 blocks</span>
+        <span class="cinema-distance">North Toronto</span>
+      </div>
+      <div class="card-name">Cineplex Yonge-Eglinton & VIP</div>
+      <span class="card-addr">2300 Yonge St · Midtown / North Toronto</span>
+      
+      
+      <div class="showtime-block"><div class="showtime-label">Regular</div><div class="showtimes"><span class="showtime ">1:00 PM</span><span class="showtime ">3:40 PM</span><span class="showtime ">6:30 PM</span><span class="showtime ">9:40 PM</span></div></div>
+      <div class="cinema-pairing">Sringeri Vidya Bharati Foundation ★🔴 is 2 blocks south at 2180 Yonge — 9th-century Chola-style Hindu temple, normally inaccessible. Also Akin Davisville 🟡, Blessed Sacrament ★🟢, Manor Road United 🟠.</div>
+      <div class="recommend">→ Strong pick: 1:00 PM — Sringeri at 10am, film at 1pm, then Akin & Blessed Sacrament after</div>
+    </a>
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Yorkdale+3401+Dufferin+Toronto" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · UltraAVX only</span>
+        <span class="cinema-distance">North York</span>
+      </div>
+      <div class="card-name">Cineplex Yorkdale</div>
+      <span class="card-addr">Yorkdale Shopping Centre, 3401 Dufferin St · North York</span>
+      <div class="showtime-block"><div class="showtime-label">UltraAVX Laser</div><div class="showtimes"><span class="showtime ultra">1:40 PM</span><span class="showtime ultra">4:30 PM</span><span class="showtime ultra">7:20 PM</span><span class="showtime ultra">10:15 PM</span></div></div>
+      
+      
+      <div class="cinema-pairing">Sparse cluster — Archives of Ontario at York campus ★🔴 (Sat only), Kadampa Buddhist Temple 🔴, Village at Black Creek 🟡, Historic Zion Schoolhouse 🟠 all require driving / transit.</div>
+      
+    </a>
+    <a class="card cinema" href="https://www.google.com/maps/search/?api=1&query=Cineplex+VIP+Don+Mills+12+Marie+Labatte+Toronto" target="_blank" rel="noopener">
+      <div class="cinema-tag-row">
+        <span class="cinema-tag">▶ Now Playing · Aga Khan / Ismaili cluster</span>
+        <span class="cinema-distance">Don Mills</span>
+      </div>
+      <div class="card-name">Cineplex VIP Don Mills (19+)</div>
+      <span class="card-addr">12 Marie Labatte Rd, Shops at Don Mills</span>
+      
+      <div class="showtime-block"><div class="showtime-label">VIP (19+)</div><div class="showtimes"><span class="showtime vip">11:45 AM</span><span class="showtime vip">3:00 PM</span><span class="showtime vip">6:30 PM</span><span class="showtime vip">10:00 PM</span></div></div>
+      
+      <div class="cinema-pairing">Pairs with the most architecturally singular cluster in Toronto: Aga Khan Museum 🟡 + Ismaili Centre ★🔴 (Fumihiko Maki prayer hall) + Japanese Canadian Cultural Centre 🟠 — all within 1 km of each other and the cinema.</div>
+      <div class="recommend">→ Strong pick: 3:00 PM — Wynford Drive cluster done by 1pm</div>
+    </a>
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Sringeri+Vidya+Bharati+Foundation+Canada+2180+Yonge+St%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Sringeri Vidya Bharati Foundation Canada</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">2180 Yonge St, Toronto</span></div>
       <div class="card-note">9th-century Chola-style Hindu temple, 25 marble murals; guided tours + Bharatanatyam performances</div>
@@ -1185,7 +1293,7 @@
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Archives+of+Ontario+134+Ian+Macdonald+Blvd%2C+York+University%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Archives of Ontario</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span><span class="badge badge-sun">Sat only</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span><span class="badge badge-sun">Sat only</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">134 Ian Macdonald Blvd, York University, Toronto</span></div>
       <div class="card-note">Largest provincial archives in Canada; conservation labs, digitization studios (normally appointment-only, Sat only)</div>
@@ -1201,7 +1309,7 @@
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Centre+for+Justice+Leadership%2C+Humber+Polytechnic+3120+Lake+Shore+Blvd+W%2C+Toronto" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">Centre for Justice Leadership, Humber Polytechnic</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span><span class="badge badge-sun">Sat only</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span><span class="badge badge-sun">Sat only</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">3120 Lake Shore Blvd W, Toronto</span></div>
       <div class="card-note">Mock courtroom, forensics lab, crime-scene lab (Sat only)</div>
@@ -1277,7 +1385,7 @@
   <div class="section-header">
     <span class="section-day">EAST</span>
     <h2 class="section-title">East Toronto</h2>
-    <span class="section-note">Danforth / Beaches / Leslieville / East York</span>
+    <span class="section-note">Danforth / Beaches / Leslieville / East York · nearest Cineplex: Yonge-Dundas (Downtown)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=Historic+Don+Jail+at+Hennick+Bridgepoint+Hospital+550+Gerrard+St+E%2C+Toronto" target="_blank" rel="noopener">
@@ -1415,7 +1523,7 @@
   <div class="section-header">
     <span class="section-day">SCARBOROUGH</span>
     <h2 class="section-title">Scarborough</h2>
-    
+    <span class="section-note">Nearest in-range Cineplex: Don Mills (15+ km) · consider out-of-range Morningside (22 km)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=ZooShare+Biogas+Plant+Toronto+Zoo%2C+Scarborough" target="_blank" rel="noopener">
@@ -1513,13 +1621,13 @@
   <div class="section-header">
     <span class="section-day">ETOBICOKE</span>
     <h2 class="section-title">Etobicoke / Weston / Humber</h2>
-    <span class="section-note">Western suburbs heritage</span>
+    <span class="section-note">Western suburbs · nearest in-range Cineplex: Varsity (Midtown)</span>
   </div>
   <div class="grid">
     <a class="card standout" href="https://www.google.com/maps/search/?api=1&query=YZD+Experience+Centre+Etobicoke+%28Pearson-adjacent%29" target="_blank" rel="noopener">
       <div class="card-top">
         <div class="card-name">YZD Experience Centre</div>
-        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW 2026</span></div>
+        <div class="card-badges"><span class="badge badge-rarity-red">🔴</span><span class="badge badge-new">★ NEW</span></div>
       </div>
       <div class="card-meta"><span class="card-addr">Etobicoke (Pearson-adjacent)</span></div>
       <div class="card-note">Pearson-adjacent; limited source detail</div>
@@ -1606,63 +1714,63 @@
     </a>
   </div>
 </section>
-<!-- ════════════════ OUT-OF-RANGE CINEMAS ════════════════ -->
-<section class="section film">
+<!-- ════════════════ OUT-OF-RANGE CINEPLEX ════════════════ -->
+<section class="section">
   <div class="section-header">
     <span class="section-day">BEYOND 10 KM</span>
-    <h2 class="section-title">Other Cineplex Locations Showing Obsession</h2>
-    <span class="section-note">Filtered out of main list · Showtimes not confirmed</span>
+    <h2 class="section-title">Other Cineplex Locations</h2>
+    <span class="section-note">Confirmed playing Obsession · showtimes not extracted</span>
   </div>
-  <div class="sub-label">All confirmed playing Obsession May 23 via Cineplex app · check cineplex.com for live times</div>
+  <div class="sub-label">Check cineplex.com for live May 23 showtimes</div>
 
   <div class="grid">
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Cinemas+Vaughan+3555+Highway+7" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Vaughan</div></div>
-      <div class="card-meta"><span class="card-addr">3555 Highway 7 W, Vaughan · 16 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Cinemas+Vaughan+3555+Highway+7" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Vaughan</div>
+      <span class="card-addr">3555 Highway 7 W, Vaughan · 16 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Mississauga+Square+One" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Mississauga Square One</div></div>
-      <div class="card-meta"><span class="card-addr">309 Rathburn Rd W, Mississauga · 22 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Mississauga+Square+One" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Mississauga Square One</div>
+      <span class="card-addr">309 Rathburn Rd W, Mississauga · 22 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Morningside+785+Milner+Scarborough" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Odeon Morningside</div></div>
-      <div class="card-meta"><span class="card-addr">785 Milner Ave, Scarborough · 22 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Morningside+785+Milner+Scarborough" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Odeon Morningside</div>
+      <span class="card-addr">785 Milner Ave, Scarborough · 22 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Courtney+Park+Mississauga" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Courtney Park</div></div>
-      <div class="card-meta"><span class="card-addr">110 Courtneypark Dr E, Mississauga · 24 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Courtney+Park+Mississauga" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Courtney Park</div>
+      <span class="card-addr">110 Courtneypark Dr E, Mississauga · 24 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Winston+Churchill+Oakville" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Winston Churchill &amp; VIP</div></div>
-      <div class="card-meta"><span class="card-addr">2081 Winston Park Dr, Oakville · 27 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Winston+Churchill+Oakville" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Winston Churchill &amp; VIP</div>
+      <span class="card-addr">2081 Winston Park Dr, Oakville · 27 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Junxion+Erin+Mills+Mississauga" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Junxion Erin Mills</div></div>
-      <div class="card-meta"><span class="card-addr">5100 Erin Mills Pkwy, Mississauga · 28 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Junxion+Erin+Mills+Mississauga" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Junxion Erin Mills</div>
+      <span class="card-addr">5100 Erin Mills Pkwy, Mississauga · 28 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Brampton+Cineplex" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">SilverCity Brampton</div></div>
-      <div class="card-meta"><span class="card-addr">50 Great Lakes Dr, Brampton · 31 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Brampton+Cineplex" target="_blank" rel="noopener">
+      <div class="card-name">SilverCity Brampton</div>
+      <span class="card-addr">50 Great Lakes Dr, Brampton · 31 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Milton+Maple+Avenue" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Milton</div></div>
-      <div class="card-meta"><span class="card-addr">1175 Maple Ave, Milton · 40 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Milton+Maple+Avenue" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Milton</div>
+      <span class="card-addr">1175 Maple Ave, Milton · 40 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Aurora+Bayview" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Odeon Aurora</div></div>
-      <div class="card-meta"><span class="card-addr">15460 Bayview Ave, Aurora · 40 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Odeon+Aurora+Bayview" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Odeon Aurora</div>
+      <span class="card-addr">15460 Bayview Ave, Aurora · 40 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Oakville+VIP+Wyecroft" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">Cineplex Oakville &amp; VIP</div></div>
-      <div class="card-meta"><span class="card-addr">3531 Wyecroft Rd, Oakville · 41 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=Cineplex+Oakville+VIP+Wyecroft" target="_blank" rel="noopener">
+      <div class="card-name">Cineplex Oakville &amp; VIP</div>
+      <span class="card-addr">3531 Wyecroft Rd, Oakville · 41 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Newmarket+Yonge" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">SilverCity Newmarket</div></div>
-      <div class="card-meta"><span class="card-addr">18195 Yonge St, Newmarket · 47 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Newmarket+Yonge" target="_blank" rel="noopener">
+      <div class="card-name">SilverCity Newmarket</div>
+      <span class="card-addr">18195 Yonge St, Newmarket · 47 km</span>
     </a>
-    <a class="card cinema cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Burlington+Brant" target="_blank" rel="noopener">
-      <div class="card-top"><div class="card-name">SilverCity Burlington</div></div>
-      <div class="card-meta"><span class="card-addr">1250 Brant St, Burlington · 49 km</span></div>
+    <a class="card cinema-far" href="https://www.google.com/maps/search/?api=1&query=SilverCity+Burlington+Brant" target="_blank" rel="noopener">
+      <div class="card-name">SilverCity Burlington</div>
+      <span class="card-addr">1250 Brant St, Burlington · 49 km</span>
     </a>
   </div>
 </section>
@@ -1671,24 +1779,24 @@
 
 <footer class="footer">
   <div class="footer-inner">
-    <div class="footer-title">Legend &amp; notes</div>
+    <div class="footer-title">Legend &amp; Notes</div>
     <div class="legend">
       <div class="legend-item">🔴 Never / almost never open</div>
       <div class="legend-item">🟠 Rare (private / special only)</div>
       <div class="legend-item">🟡 Fee or appointment normally</div>
       <div class="legend-item">🟢 Open regularly, special programming</div>
       <div class="legend-item">★ New 2026 participant</div>
-      <div class="legend-item"><span style="width:18px;height:12px;background:#1a1614;display:inline-block;border-radius:2px;"></span> Standout (never-open site)</div>
+      <div class="legend-item"><span style="width:18px;height:12px;background:#0F0F12;display:inline-block;border-radius:2px;"></span> Standout (never-open site)</div>
     </div>
     <div class="footer-flag"><strong>⚑ Heads up:</strong> Lower Bay Station is NOT participating in 2026 — often listed in third-party guides. Do not plan around it.</div>
     <div class="footer-note">
-      168 official Doors Open 2026 sites (some downtown architecture studios shown grouped — Giaimo / DIALOG / Gow Hastings / DTAH / Q4 / Taylor Hazell / Turner Fleischer = 7 separate venues).
-      Sat May 23 only: 401 Richmond, Alliance Française, Akin Davisville, Archives of Ontario, Centre for Justice Leadership, Billy Bishop Airport.
-      Sun May 24 only: Argonaut Rowing Club, Applewood Shaver House.
-      All other sites open both days, 10am – 5pm.
-      Showtime data confirmed from Cineplex app screenshots May 19, 2026 for 6 in-range cinemas. Out-of-range cinema list is from Cineplex app confirming Obsession is playing — exact showtimes not extracted.
+      Doors Open Toronto runs Sat May 23 &amp; Sun May 24, 2026, 10am – 5pm. Some sites Sat-only or Sun-only — badged on each card.
+      Showtime data confirmed from Cineplex app screenshots May 19, 2026 for 6 in-range cinemas (≤10 km of Bloor &amp; Ossington). Out-of-range cinemas confirmed playing Obsession but exact showtimes not extracted.
+      154 official Doors Open sites shown; 7 downtown architecture studios grouped into one entry (Giaimo / DIALOG / Gow Hastings / DTAH / Q4 / Taylor Hazell / Turner Fleischer). Official count is 168.
       Rarity rankings are editorial judgments based on normal public access patterns.
-      Sources: toronto.ca/doorsopen, doorsopenontario.on.ca, Cineplex app. Cards open Google Maps search — venue may resolve to nearby alternatives where exact address is missing.
+    </div>
+    <div class="footer-disclaimer">
+      This is an independent fan guide. Not affiliated with or endorsed by Cineplex Entertainment LP, Focus Features, Blumhouse, Universal Pictures, the City of Toronto, or Doors Open Toronto. Cineplex® is a registered trademark of Cineplex Entertainment LP, used here for editorial reference only. Cards open Google Maps search; venue may resolve to nearby alternatives where exact address is unavailable.
     </div>
   </div>
 </footer>
